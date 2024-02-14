@@ -5,6 +5,9 @@ export class Blogs {
   @PrimaryGeneratedColumn()
   id: number
 
+  @Column()
+  topic:string
+
   @Column({ nullable: false, length:255})
   blog_name: string
 
