@@ -1,5 +1,5 @@
 import { Column, CreateDateColumn, Entity, JoinColumn, OneToOne, PrimaryGeneratedColumn } from "typeorm";
-import { Profile } from "./profile.entity";
+import { Profiles } from "./profile.entity";
 
 enum UserRole {
     SUPERADMIN = 4,
@@ -8,8 +8,8 @@ enum UserRole {
     VIEWER = 1,
 }
 
-@Entity()
-export class User{
+@Entity( { name: 'users '})
+export class Users{
     
     @PrimaryGeneratedColumn()
     id: number;
@@ -32,8 +32,8 @@ export class User{
     @Column()
     updatedAt: Date;
 
-    @OneToOne(() => Profile) 
+    @OneToOne(() => Profiles) 
     @JoinColumn() 
-  profile: Profile;
+    profile: Profiles;
 
 }
