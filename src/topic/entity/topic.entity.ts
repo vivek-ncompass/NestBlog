@@ -1,9 +1,11 @@
+import { Blogs } from "src/blogs/entity/blogs.entity"
+import { Users } from "src/users/entity/users.entity"
 import { Column, CreateDateColumn, Entity, ManyToMany, PrimaryGeneratedColumn } from "typeorm"
 
-@Entity({name:'topic'})
-export class TOPIC {
-  @PrimaryGeneratedColumn('uuid')
-  id: string
+@Entity({name:'topics'})
+export class Topics {
+  @PrimaryGeneratedColumn()
+  id: number
 
   @Column({ nullable: false, length:255})
   topic_name: string
@@ -12,7 +14,7 @@ export class TOPIC {
   desc:string
 
   @Column({nullable:false})
-  owner: string
+  topic_owner: string
 
   @CreateDateColumn({type:"timestamp", nullable:false })
   created_at : Date
