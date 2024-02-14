@@ -5,8 +5,8 @@ enum Gender {
     MALE = 'male',
   }
 
-@Entity()
-export class Profile{
+@Entity( { name: 'profiles'})
+export class Profiles{
 
     @PrimaryGeneratedColumn()
     id: number;
