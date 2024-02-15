@@ -1,6 +1,7 @@
 import { Module } from '@nestjs/common';
 import { AppController } from './app.controller';
 import { AppService } from './app.service';
+import { UsersModule } from './users/users.module';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { ConfigModule } from '@nestjs/config';
 import { Profiles } from './users/entity/profile.entity';
@@ -10,6 +11,7 @@ import { Blogs } from './blogs/entity/blogs.entity';
 
 @Module({
   imports: [
+    UsersModule, 
     ConfigModule.forRoot({isGlobal: true}),
     TypeOrmModule.forRoot({
       type:"mysql",
