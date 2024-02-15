@@ -1,4 +1,4 @@
-import { HttpCode, HttpStatus, Injectable } from '@nestjs/common';
+import { HttpStatus, Injectable } from '@nestjs/common';
 import { CreateTopicParams } from './types/createTopic.types';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
@@ -10,7 +10,7 @@ import { Topics } from './entity/topic.entity';
 export class TopicService {
   constructor(
     @InjectRepository(Users) private usersRepository: Repository<Users>,
-    @InjectRepository(Topics) private topicssRepository: Repository<Topics>,
+    @InjectRepository(Topics) private topicsRepository: Repository<Topics>,
   ) {}
 
   findUserData(user) {
@@ -37,7 +37,7 @@ export class TopicService {
             })
           : null;
 
-      const createTopicData = this.topicssRepository.create({
+      const createTopicData = this.topicsRepository.create({
         topic_name: createTopicParams.topic_name,
         desc: createTopicParams.desc,
         topic_owner: createTopicParams.topic_owner,
@@ -46,7 +46,7 @@ export class TopicService {
         blogs: null,
       });
 
-      return this.topicssRepository.save(createTopicData);
+      return this.topicsRepository.save(createTopicData);
     }
   }
 }
