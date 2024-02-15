@@ -4,5 +4,9 @@ export type CreateTopicParams = {
 
   desc: string
 
+  editors: string[]
+
+  viewers: string[]
+
   topic_owner: string
 }

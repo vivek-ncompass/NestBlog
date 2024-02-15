@@ -1,4 +1,4 @@
-import { IsNotEmpty, IsString } from "class-validator"
+import { IsArray, IsNotEmpty, IsString } from "class-validator"
 
 export class TopicDtoParams{
   
@@ -10,7 +10,11 @@ export class TopicDtoParams{
   @IsNotEmpty()
   desc: string
 
-  @IsString()
-  @IsNotEmpty()
-  topic_owner: string
+  @IsArray()
+  @IsString({each:true})
+  editors: string[]
+
+  @IsArray()
+  @IsString({each:true})
+  viewers: string[]
 }

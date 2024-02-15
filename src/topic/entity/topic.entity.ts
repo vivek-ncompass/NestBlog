@@ -19,7 +19,7 @@ export class Topics {
   @CreateDateColumn({type:"timestamp", nullable:false })
   created_at : Date
 
-  @Column({nullable:true})
+  @Column({nullable:true, default: null})
   updated_at:Date
 
   @ManyToMany(()=>Users)
