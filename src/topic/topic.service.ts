@@ -13,8 +13,8 @@ export class TopicService {
     @InjectRepository(Topics) private topicsRepository: Repository<Topics>,
   ) {}
 
-  findUserData(user) {
-    return this.usersRepository.findOne({ where: { username: user } });
+  async findUserData(user) {
+    return await this.usersRepository.findOne({ where: { username: user } });
   }
 
   async createTopic(level, createTopicParams: CreateTopicParams) {
@@ -23,19 +23,16 @@ export class TopicService {
         message: 'Cannot create topic as you dont have the permission to do so',
       });
     } else {
-      const editorsDataArr: any =
-        createTopicParams.editors.length > 0
-          ? createTopicParams.editors.map(async (user) => {
-              this.findUserData(user);
-            })
-          : null;
+      
+      let editorsDataArr = [null], viewersDataArr = [null]
 
-      const viewersDataArr: any =
-        createTopicParams.viewers.length > 0
-          ? createTopicParams.viewers.map(async (user) => {
-              this.findUserData(user);
-            })
-          : null;
+      for(let i = 0; i<createTopicParams.editors.length; i++){
+        editorsDataArr.push(await this.findUserData(createTopicParams.editors[i]))
+      }
+      
+      for(let i = 0; i<createTopicParams.viewers.length; i++){
+        viewersDataArr.push(await this.findUserData(createTopicParams.viewers[i]))
+      }
 
       const createTopicData = this.topicsRepository.create({
         topic_name: createTopicParams.topic_name,

@@ -1,4 +1,5 @@
-import { Column, CreateDateColumn, Entity, PrimaryGeneratedColumn } from "typeorm"
+import { Topics } from "src/topic/entity/topic.entity"
+import { Column, CreateDateColumn, Entity, ManyToOne, PrimaryGeneratedColumn } from "typeorm"
 
 @Entity({name:'blogs'})
 export class Blogs {
@@ -31,5 +32,8 @@ export class Blogs {
 
   @Column({nullable:true, default: null})
   updated_at:Date
+
+  @ManyToOne(()=>Topics, topic=> topic.blogs)
+  topic_rel: Topics
 
 }

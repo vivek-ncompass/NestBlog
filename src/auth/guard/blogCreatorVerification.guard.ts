@@ -9,18 +9,15 @@ export class BlogCreatorVerificationGuard implements CanActivate{
   constructor(@InjectRepository(Topics) private topicsRepository: Repository<Topics>){}
 
   async canActivate(context: ExecutionContext): Promise<boolean> {
-    
     const request = context.switchToHttp().getRequest()
-    const response = context.switchToHttp().getResponse()
     const body = request.body
-
+    
     try{
-      const topicDetails = await this.topicsRepository.findOne({where: {topic_name:body.topic}, relations:["users"]})
+      const topicDetails = await this.topicsRepository.findOne({where: {topic_name:body.topic}, relations:["editors"]})
 
       const editors = topicDetails.editors
-
       for(let i = 0; i<editors.length; i++){
-        if(editors[i].username === response.payload.username){
+        if(editors[i].username === request.payload.username){
           return true
       }
     }

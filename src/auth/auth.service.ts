@@ -17,7 +17,7 @@ export class AuthService {
     private readonly jwtService: JwtService,
  ){};
 
- async login(loginDetails: LoginUserType): Promise<any> {
+ async login(loginDetails: LoginUserTypes): Promise<any> {
     const { username, password } = loginDetails;
     const user = await this.userRepository.findOne({
       where: { username, password: md5(password) },
