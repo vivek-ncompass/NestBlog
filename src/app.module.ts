@@ -9,10 +9,10 @@ import { Users } from './users/entity/users.entity';
 import { Topics } from './topic/entity/topic.entity';
 import { Blogs } from './blogs/entity/blogs.entity';
 import { TopicModule } from './topic/topic.module';
+import { BlogsModule } from './blogs/blogs.module';
 
 @Module({
-  imports: [
-    UsersModule, 
+  imports: [ 
     ConfigModule.forRoot({isGlobal: true}),
     TypeOrmModule.forRoot({
       type:"mysql",
@@ -24,7 +24,7 @@ import { TopicModule } from './topic/topic.module';
       entities:[Users, Profiles, Topics, Blogs],
       synchronize:true
     }),
-    TopicModule
+    UsersModule,TopicModule, BlogsModule
   ],
   controllers: [AppController],
   providers: [AppService],
