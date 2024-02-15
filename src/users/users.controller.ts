@@ -1,8 +1,9 @@
-import { Body, ConflictException, Controller, Post, Res, UnauthorizedException } from '@nestjs/common';
+import { Body, Controller, Post, Res } from '@nestjs/common';
 import { UsersService } from './users.service';
 import { CreateUserDto } from './dtos/createUser.dto';
 import { ApiResponse } from 'src/utils/response';
 import { Response } from 'express';
+import { CustomError } from 'src/utils/customError';
 
 @Controller('users')
 export class UsersController {
@@ -10,19 +11,12 @@ export class UsersController {
 
   @Post()
   async registerUser(@Body() createUserDto : CreateUserDto, @Res() response: Response){
-   try{
-    const createdUser = await this.usersService.registerUser(createUserDto);
-    if (!createdUser)
-      throw new Error();
-    return new ApiResponse(response, 200, {message:"User Created"});
+    try{
+      const createdUser = await this.usersService.registerUser(createUserDto);
+      return new ApiResponse(response, 200, {message:"User Created"});
+    }
+    catch( error ){
+      throw new CustomError(404, {message:"User not created"})
+    }
   }
-  catch( error ){
-    if (error instanceof Error) {
-      return new ApiResponse(response, 409, { message: "Username already exists" });
-    } 
-    else {
-      return new ApiResponse(response, 500, { message: "Failed to register user" });
-}
-  }
-}
 }

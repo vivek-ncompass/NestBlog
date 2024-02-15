@@ -14,17 +14,20 @@ export class AuthService {
     private userRepository: Repository<Users>
  ){};
 
- async loginUser(loginUserDetails : LoginUserTypes){
-     const { username, password} = loginUserDetails;
-     
-     // checking username and password
-      const res = this.userRepository.findOne({ where: {username: username, password: md5(password)}})
+ // login user
 
- }
 
- async updateUser(updateUserDetails : UpdateUserTypes){
+ 
+ async modifyUser(updateUserDetails : UpdateUserTypes){
        const { id , level } = updateUserDetails;
-       
+       // find the user through id
+       const user = await this.userRepository.findOne( { where : { id} } );
+       if (!user) {
+        throw new Error(`User with ID ${id} not found`);
+      }
+       // change the level of user 
+       user.level = level;
+       await this.userRepository.save(user);            
  }
 
 }
