@@ -6,6 +6,7 @@ import { Blogs } from './entity/blogs.entity';
 import { CreateBlogParams } from './types/createBlog.type';
 import { Topics } from 'src/topic/entity/topic.entity';
 import { CustomError } from 'src/utils/customError';
+import { UpdateBlogParams } from './types/updateBlog.type';
 
 @Injectable()
 export class BlogsService {
@@ -36,5 +37,20 @@ export class BlogsService {
 
     return await this.blogsRepository.save(blogDetails)
 
+  }
+
+  async updateBlog(id :number, updateBlogParams :UpdateBlogParams){
+    
+    let updateInfo = {}
+
+    for(let i in updateBlogParams){
+      if(updateBlogParams[i].length !== 0){
+        updateInfo[i] = updateBlogParams[i]
+      }
+    }
+
+    const updateBlogData:any = await this.blogsRepository.update({id},{...updateInfo})
+
+    return this.blogsRepository.save(updateBlogData)
   }
 }
