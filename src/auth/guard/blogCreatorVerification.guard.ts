@@ -4,7 +4,7 @@ import { Topics } from "src/topic/entity/topic.entity";
 import { CustomError } from "src/utils/customError";
 import { Repository } from "typeorm";
 
-export class BlogEditorVerificationGuard implements CanActivate{
+export class BlogCreatorVerificationGuard implements CanActivate{
   
   constructor(@InjectRepository(Topics) private topicsRepository: Repository<Topics>){}
 
