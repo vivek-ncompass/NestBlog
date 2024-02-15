@@ -4,7 +4,7 @@ import { TopicDtoParams } from './dto/createTopic.dto';
 import { Response } from 'express';
 import { ApiResponse } from 'src/utils/response';
 
-@Controller()
+@Controller("topic")
 export class TopicController {
   constructor(private topicService: TopicService) {}
 
