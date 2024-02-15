@@ -18,10 +18,10 @@ export class Profiles{
     address: string;
 
     @Column( { nullable : false} )
-    email: string;
+    email: string
 
-    @Column()
-    phoneNo: bigint;
+    @Column({type:'bigint'})
+    phoneNo: number
 
     @Column( { type: 'enum', enum: Gender })
     gender: Gender
