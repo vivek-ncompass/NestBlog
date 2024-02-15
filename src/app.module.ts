@@ -7,6 +7,7 @@ import { Profiles } from './users/entity/profile.entity';
 import { Users } from './users/entity/users.entity';
 import { Topics } from './topic/entity/topic.entity';
 import { Blogs } from './blogs/entity/blogs.entity';
+import { TopicModule } from './topic/topic.module';
 
 @Module({
   imports: [
@@ -21,6 +22,7 @@ import { Blogs } from './blogs/entity/blogs.entity';
       entities:[Users, Profiles, Topics, Blogs],
       synchronize:true
     }),
+    TopicModule
   ],
   controllers: [AppController],
   providers: [AppService],
