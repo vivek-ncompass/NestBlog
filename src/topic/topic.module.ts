@@ -13,4 +13,4 @@ import { Users } from 'src/users/entity/users.entity';
   controllers: [TopicController],
   providers: [TopicService],
 })
-export class AppModule {}
+export class TopicModule {}
