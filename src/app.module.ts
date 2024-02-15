@@ -11,7 +11,7 @@ import { Blogs } from './blogs/entity/blogs.entity';
 import { TopicModule } from './topic/topic.module';
 import { BlogsModule } from './blogs/blogs.module';
 import { AuthModule } from './auth/auth.module';
-
+import { JwtModule } from '@nestjs/jwt';
 @Module({
   imports: [ 
     ConfigModule.forRoot({isGlobal: true}),

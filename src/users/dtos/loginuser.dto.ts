@@ -1,5 +1,5 @@
 import { IsString } from 'class-validator';
-import { LoginController } from './login.controller';
+import { UsersController} from '../users.controller';
 
 export class LoginUserDto{
     @IsString()
