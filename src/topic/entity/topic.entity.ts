@@ -1,6 +1,6 @@
 import { Blogs } from "src/blogs/entity/blogs.entity"
 import { Users } from "src/users/entity/users.entity"
-import { Column, CreateDateColumn, Entity, ManyToMany, PrimaryGeneratedColumn } from "typeorm"
+import { Column, CreateDateColumn, Entity, JoinTable, ManyToMany, PrimaryGeneratedColumn } from "typeorm"
 
 @Entity({name:'topics'})
 export class Topics {
@@ -23,12 +23,15 @@ export class Topics {
   updated_at:Date
 
   @ManyToMany(()=>Users)
+  @JoinTable()
   editors:Users[]
 
   @ManyToMany(()=>Users)
+  @JoinTable()
   viewers:Users[]
 
   @ManyToMany(()=>Blogs)
+  @JoinTable()
   blogs:Blogs[]
 
 }
