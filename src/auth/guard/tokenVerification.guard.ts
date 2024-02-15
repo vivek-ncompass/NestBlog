@@ -1,6 +1,5 @@
 import { CanActivate, ExecutionContext, Injectable } from "@nestjs/common";
 import { JwtService } from '@nestjs/jwt'
-import { decode } from "punycode";
 
 @Injectable()
 export class TokenVerificationGuard implements CanActivate {
