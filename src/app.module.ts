@@ -15,11 +15,11 @@ import { Blogs } from './blogs/entity/blogs.entity';
     ConfigModule.forRoot({isGlobal: true}),
     TypeOrmModule.forRoot({
       type:"mysql",
-      host:process.env.HOST,
-      port:+process.env.PORT,
-      username:process.env.USER,
-      password:process.env.PASSWORD,
-      database:process.env.DATABASE,
+      host:process.env.MYSQL_HOST,
+      port:+process.env.MYSQL_PORT,
+      username:process.env.MYSQL_USER,
+      password:process.env.MYSQL_PASSWORD,
+      database:process.env.MYSQL_DATABASE,
       entities:[Users, Profiles, Topics, Blogs],
       synchronize:true
     }),
