@@ -5,7 +5,6 @@ import { TypeOrmModule } from '@nestjs/typeorm';
 import { Blogs } from './entity/blogs.entity';
 import { Users } from 'src/users/entity/users.entity';
 import { Topics } from 'src/topic/entity/topic.entity';
-import { JwtService } from '@nestjs/jwt';
 import { JwtModule } from '@nestjs/jwt';
 import { ConfigModule } from '@nestjs/config';
 
@@ -19,6 +18,6 @@ import { ConfigModule } from '@nestjs/config';
     }),
   ],
   controllers: [BlogsController],
-  providers: [BlogsService, JwtService]
+  providers: [BlogsService]
 })
 export class BlogsModule {}

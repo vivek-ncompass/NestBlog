@@ -13,6 +13,7 @@ import { Topics } from 'src/topic/entity/topic.entity';
     TypeOrmModule.forFeature([Users, Topics]),
     JwtModule.register({
       secret: process.env.JWT_KEY,
+      global:true
     }),
   ],
   controllers: [AuthController],

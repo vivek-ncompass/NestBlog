@@ -37,4 +37,9 @@ export class BlogsService {
 
     return this.blogsRepository.save(blogDetails)
   }
+
+  async viewSpecificBlog(id:number){
+    const blogDetails = await this.blogsRepository.findOne({where:{id:id}})
+    return blogDetails
+  }
 }
