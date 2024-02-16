@@ -33,6 +33,8 @@ export class BlogsService {
       }
     }
 
+    blogDetails.updated_at = new Date()
+
     return this.blogsRepository.save(blogDetails)
   }
 }
