@@ -9,18 +9,19 @@ import { TopicUpdateGuard } from 'src/auth/guard/topicUpdate.guard';
 import { UpdateTopicDto } from './dto/updateTopic.dto';
 import { DeleteRolesDto } from './dto/deleteRoles.dto';
 import { ViewBlogFromTopicGuard } from 'src/auth/guard/viewBlogFromTopic.guard';
+import { CreateTopicGuard } from 'src/auth/guard/createTopic.guard';
 
 @Controller("topic")
 export class TopicController {
   constructor(private topicService: TopicService) {}
 
-  @UseGuards(TokenVerificationGuard)
+  @UseGuards(TokenVerificationGuard, CreateTopicGuard)
   @Post()
   async createTopic(@Body(ValidationPipe) topicDtoParams: TopicDtoParams, @Res() response: Response, @Request() request) {
     try{
       const dataToPass = {topic_name: topicDtoParams.topic_name, desc: topicDtoParams.desc, editors: topicDtoParams.editors, viewers: topicDtoParams.viewers, topic_owner: request.payload.username}
 
-      const createdTopic = await this.topicService.createTopic(request.payload.level, dataToPass)
+      const createdTopic = await this.topicService.createTopic(dataToPass)
 
       new ApiResponse(response, 200, { message: "Topic Created Successfully" })
     }
