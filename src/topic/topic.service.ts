@@ -75,7 +75,7 @@ export class TopicService {
 
   }
 
-  async deleteEditor(id:number, deleteRolesParams: DeleteRoleParams){
+  async deleteRole(id:number, deleteRolesParams: DeleteRoleParams){
     const topicData = await this.topicsRepository.findOne({where: {id:id},relations:[deleteRolesParams.role]})
 
     let newRoleArr = []
