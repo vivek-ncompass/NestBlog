@@ -8,14 +8,15 @@ import { UpdateProfileType } from './types/updateProfile.type';
 import { Profiles } from './entity/profile.entity';
 import { CustomError } from 'src/utils/customError';
 import { ChangePasswordType } from './types/changePassword.type';
+import { ChangeLevelParams } from './types/changeLevel.type';
 
 @Injectable()
 export class UsersService {
 
-   constructor(
-    @InjectRepository(Users) private userRepository: Repository<Users>,
-    @InjectRepository(Profiles) private profileRepository: Repository<Profiles>
-    ){}
+  constructor(
+  @InjectRepository(Users) private userRepository: Repository<Users>,
+  @InjectRepository(Profiles) private profileRepository: Repository<Profiles>
+  ){}
   
 
   async registerUser(userDetails: CreateUserTypes) {
@@ -52,28 +53,34 @@ export class UsersService {
       profile.updatedAt = new Date();
       await this.profileRepository.save(profile);
       return profile;
-    } catch (error) {
+    } 
+    catch (error) {
       if (error instanceof NotFoundException) {
         throw new NotFoundException('Profile not found');
       } else {
         throw new Error('Failed to update profile');
       }
     }
-      }
-    
-      async changePassword(id: number, changePasswordUser : ChangePasswordType){
-        const user = await this.userRepository.findOne({where: {id}})
-        if(!user){
-          throw new NotFoundException('User Not Found')
-        }
-        user.updatedAt = new Date();
-        user.password = md5(changePasswordUser.password)
-        try{
-          const passwordChanged = await this.userRepository.save(user); 
-          return passwordChanged;
-        }
-        catch(error){
-          throw new Error('Failed to change the password')
-        };
-      }
   }
+    
+  async changePassword(id: number, changePasswordUser : ChangePasswordType){
+    const user = await this.userRepository.findOne({where: {id}})
+    if(!user){
+      throw new NotFoundException('User Not Found')
+    }
+    user.updatedAt = new Date();
+    user.password = md5(changePasswordUser.password)
+    try{
+      const passwordChanged = await this.userRepository.save(user); 
+      return passwordChanged;
+    }
+    catch(error){
+      throw new Error('Failed to change the password')
+    };
+  }
+
+  async changeLevel(changeLevelParams: ChangeLevelParams){
+    const userDetails = await this.userRepository.update({username:changeLevelParams.username},{level:changeLevelParams.level})
+    return userDetails
+  }
+}
