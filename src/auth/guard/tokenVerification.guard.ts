@@ -8,14 +8,15 @@ export class TokenVerificationGuard implements CanActivate {
  canActivate(context: ExecutionContext): boolean {
     const request = context.switchToHttp().getRequest();
     const token = this.extractTokenFromRequest(request);
-     
+    
     if(!token){
         return false;
     }
-
+    
     try{
         const decodedToken = this.jwtService.verify(token)
         request.payload = decodedToken;
+        
         return true;
     }
     catch(error){

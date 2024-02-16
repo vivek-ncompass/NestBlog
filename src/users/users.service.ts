@@ -48,6 +48,8 @@ export class UsersService {
         throw new NotFoundException('Unable to find Profile');
       }
       Object.assign(profile, updateProfile);
+      profile.updatedAt = new Date();
+      await this.profileRepository.save(profile);
       return profile;
     } catch (error) {
       if (error instanceof NotFoundException) {
@@ -57,7 +59,4 @@ export class UsersService {
       }
     }
       }
-      
-  }     
-    
-
+    }
