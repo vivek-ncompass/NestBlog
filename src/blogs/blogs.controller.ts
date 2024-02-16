@@ -1,4 +1,4 @@
-import { Body, Controller, Get, Delete, HttpStatus, Param, ParseIntPipe, Patch, Post, Request, Res, UseGuards } from '@nestjs/common';
+import { Body, Controller, Get, Delete, HttpStatus, Param, ParseIntPipe, Patch, Post, Request, Res, UseGuards, ValidationPipe } from '@nestjs/common';
 import { BlogsService } from './blogs.service';
 import { CreateBlogDto } from './dto/createBlog.dto';
 import { ApiResponse } from 'src/utils/response';
@@ -17,7 +17,7 @@ export class BlogsController {
 
   @UseGuards(TokenVerificationGuard, BlogCreatorVerificationGuard)
   @Post()
-  async createBlog(@Body() createBlogDto:CreateBlogDto, @Res() response: Response, @Request() request){
+  async createBlog(@Body(ValidationPipe) createBlogDto:CreateBlogDto, @Res() response: Response, @Request() request){
     try{
       const createBlogData = await this.blogsService.createBlog({...createBlogDto, blog_owner: request.payload.username})
       new ApiResponse(response, 200, {messgae: "Blog Created"})
@@ -30,7 +30,7 @@ export class BlogsController {
 
   @UseGuards(TokenVerificationGuard, BlogEditorVerificationGuard)
   @Patch(":id")
-  updateBlog(@Param('id',ParseIntPipe) id:number, @Body() updateBlogDto: UpdateBlogDto, @Res() response:Response){
+  updateBlog(@Param('id',ParseIntPipe) id:number, @Body(ValidationPipe) updateBlogDto: UpdateBlogDto, @Res() response:Response){
     try{
       const updateBlogData = this.blogsService.updateBlog(id,updateBlogDto)
       new ApiResponse(response, 200, {message:"Blog Updated Successfully"})

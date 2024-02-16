@@ -1,4 +1,4 @@
-import { Body, Controller, HttpStatus, NotFoundException, Param, Patch, Post, Put, Res, UseGuards } from '@nestjs/common';
+import { Body, Controller, HttpStatus, NotFoundException, Param, Patch, Post, Put, Res, UseGuards, ValidationPipe } from '@nestjs/common';
 import { UsersService } from './users.service';
 import { CreateUserDto } from './dtos/createUser.dto';
 import { ApiResponse } from 'src/utils/response';
@@ -15,7 +15,7 @@ import { ChangeLevelGuard } from 'src/auth/guard/changeLevelGuard.guard';
 export class UsersController {
   constructor(private readonly usersService: UsersService) {}
   @Post()
-  async registerUser(@Body() createUserDto: CreateUserDto,@Res() response: Response,
+  async registerUser(@Body(ValidationPipe) createUserDto: CreateUserDto,@Res() response: Response,
   ) {
     try {
       const createdUser = await this.usersService.registerUser(createUserDto);
@@ -35,7 +35,7 @@ export class UsersController {
   }
 
   @Put(':userId')
-  async updateProfile(@Param('userId') id: number, @Body() updateProfileDto: UpdateProfileDto, @Res() response: Response) {
+  async updateProfile(@Param('userId') id: number, @Body(ValidationPipe) updateProfileDto: UpdateProfileDto, @Res() response: Response) {
     try {
       const updatedProfile = await this.usersService.updateProfile(id,updateProfileDto);
       return new ApiResponse(response, 200, { message: "Profile updated successfully", profile: updatedProfile });
@@ -49,7 +49,7 @@ export class UsersController {
   }
 
   @Patch(':id')
-  async changeUserPassword(@Param('id') id:number, @Body() changePasswordDto: ChangePasswordDto, @Res() response: Response) {
+  async changeUserPassword(@Param('id') id:number, @Body(ValidationPipe) changePasswordDto: ChangePasswordDto, @Res() response: Response) {
     const passwordChanged = await this.usersService.changePassword(id, changePasswordDto);
     return new ApiResponse(response, 200, { message: "Password Changed successfully "})
   }
@@ -57,7 +57,7 @@ export class UsersController {
 
   @UseGuards(TokenVerificationGuard, ChangeLevelGuard)
   @Patch()
-  async changeLevel(@Res() response: Response, @Body() changeLevelDto: ChangeLevelDto){
+  async changeLevel(@Res() response: Response, @Body(ValidationPipe) changeLevelDto: ChangeLevelDto){
     const changedLevel = await this.usersService.changeLevel(changeLevelDto)
     new ApiResponse(response, 200, {message:"Level of the user changed"})
   }

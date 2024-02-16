@@ -16,7 +16,7 @@ export class TopicController {
 
   @UseGuards(TokenVerificationGuard)
   @Post()
-  async createTopic(@Body() topicDtoParams: TopicDtoParams, @Res() response: Response, @Request() request) {
+  async createTopic(@Body(ValidationPipe) topicDtoParams: TopicDtoParams, @Res() response: Response, @Request() request) {
     try{
       const dataToPass = {topic_name: topicDtoParams.topic_name, desc: topicDtoParams.desc, editors: topicDtoParams.editors, viewers: topicDtoParams.viewers, topic_owner: request.payload.username}
 
@@ -31,7 +31,7 @@ export class TopicController {
 
   @UseGuards(TokenVerificationGuard, TopicUpdateGuard)
   @Patch(":id")
-  async updateTopic(@Param("id",ParseIntPipe) id:number, @Body() updateTopicDto : UpdateTopicDto, @Res() response: Response){
+  async updateTopic(@Param("id",ParseIntPipe) id:number, @Body(ValidationPipe) updateTopicDto : UpdateTopicDto, @Res() response: Response){
     try{
 
       if(!updateTopicDto.editors){
