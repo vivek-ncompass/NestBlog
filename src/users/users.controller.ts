@@ -1,13 +1,14 @@
-import { Body, Controller, Post, Res, ConflictException } from '@nestjs/common';
+import { Body, Controller, HttpStatus, Post, Res } from '@nestjs/common';
 import { UsersService } from './users.service';
 import { CreateUserDto } from './dtos/createUser.dto';
 import { ApiResponse } from 'src/utils/response';
 import { Response } from 'express';
+import { CustomError } from 'src/utils/customError';
+import { UpdateUserDto } from './dtos/UpdateUserDto.dto';
 
 @Controller('users')
 export class UsersController {
   constructor(private readonly usersService: UsersService) {}
-  
   @Post()
   async registerUser(
     @Body() createUserDto: CreateUserDto,
@@ -15,17 +16,28 @@ export class UsersController {
   ) {
     try {
       const createdUser = await this.usersService.registerUser(createUserDto);
-      return new ApiResponse(response, 201, { message: 'User Created' });
-    } catch (error) {
-      if (error instanceof ConflictException) {
-        return new ApiResponse(response, 409, {
-          message: 'Username already exists',
-        });
-      } else {
-        return new ApiResponse(response, 500, {
-          message: 'Failed to register user',
+      
+      return new ApiResponse(response, 200, { message: 'User Created' });
+    } 
+    catch (error) {
+      if (
+        error instanceof CustomError &&
+        error.responseObject.message === 'Username already exists'
+      ) {
+        return new ApiResponse(response, HttpStatus.BAD_REQUEST, {
+          message: error.message,
         });
       }
+      throw new CustomError(404, { message: 'User not created' });
     }
+  }
+
+  @Post('/modifyUser')
+  async modifyUserAccess(
+    @Body() updateUserDto: UpdateUserDto,
+    @Res() response: Response,
+  ) {
+    this.usersService.modifyUser(updateUserDto);
+    return new ApiResponse(response, 200, { message: 'Level upgraded' });
   }
 }
