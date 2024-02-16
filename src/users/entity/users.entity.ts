@@ -29,7 +29,7 @@ export class Users{
     @Column( { type: 'timestamp', precision: 0, nullable : false, default: () => 'CURRENT_TIMESTAMP'})
     createdAt: Date;
 
-    @Column({nullable:true, default: null})
+    @Column({type: 'timestamp', nullable:true, default: null})
     updatedAt: Date;
 
     @OneToOne(() => Profiles) 

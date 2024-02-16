@@ -3,4 +3,5 @@ export type UpdateProfileType = {
     address ?: string;
     email?:string;
     phone?: bigint;
+    password?: string;
 }
