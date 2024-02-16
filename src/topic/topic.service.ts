@@ -50,7 +50,7 @@ export class TopicService {
   }
 
   async updateTopic(id:number, updateTopicParams: UpdateTopicParams){
-    const topicData = await this.topicsRepository.findOne({where:{id:id}})
+    const topicData = await this.topicsRepository.findOne({where:{id:id}, relations:['editors','viewers']})
     if(!topicData){
       throw new CustomError(404, {message:"Topic Not Found"})
     }
