@@ -6,6 +6,7 @@ import { Users } from 'src/users/entity/users.entity';
 import { CustomError } from 'src/utils/customError';
 import { Topics } from './entity/topic.entity';
 import { UpdateTopicParams } from './types/updateTopic.types';
+import { DeleteRoleParams } from './types/deleteRoles.types';
 
 @Injectable()
 export class TopicService {
@@ -72,5 +73,23 @@ export class TopicService {
 
     return this.topicsRepository.save(topicData)
 
+  }
+
+  async deleteEditor(id:number, deleteRolesParams: DeleteRoleParams){
+    const topicData = await this.topicsRepository.findOne({where: {id:id},relations:[deleteRolesParams.role]})
+
+    let newRoleArr = []
+    console.log(topicData[deleteRolesParams.role])
+    for(let i = 0; i<topicData[deleteRolesParams.role].length; i++){
+      const role = topicData[deleteRolesParams.role][i]
+      if(!deleteRolesParams.evList.includes(role.username)){
+        newRoleArr.push(role)
+      }
+    }
+
+    topicData.editors = newRoleArr
+    topicData.updated_at = new Date()
+
+    return this.topicsRepository.save(topicData)
   }
 }
