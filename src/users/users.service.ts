@@ -27,14 +27,14 @@ export class UsersService {
 
   async registerUser(userDetails: CreateUserTypes) {
     try {
-      const { username, password, address, email, phoneNo, gender } =
+      const { username, password, address, email, phoneNo, gender, level } =
         userDetails;
 
       const userProfileData = { username, address, email, phoneNo, gender };
       const userProfile = this.profileRepository.create(userProfileData);
       const savedUserProfile = await this.profileRepository.save(userProfile);
 
-      const userCredentials = { username, password: md5(password) };
+      const userCredentials = { username, password: md5(password), level};
       const user = this.userRepository.create(userCredentials);
       user.profile = savedUserProfile;
       const savedUser = await this.userRepository.save(user);
