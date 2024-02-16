@@ -4,7 +4,6 @@ import { CreateUserDto } from './dtos/createUser.dto';
 import { ApiResponse } from 'src/utils/response';
 import { Response } from 'express';
 import { CustomError } from 'src/utils/customError';
-import { UpdateUserDto } from './dtos/UpdateUserDto.dto';
 import { UpdateProfileDto } from './dtos/updateProfile.dto';
 
 @Controller('users')
@@ -46,12 +45,12 @@ export class UsersController {
     }
   }
 
-  @Post('/modifyUser')
-  async modifyUserAccess(
-    @Body() updateUserDto: UpdateUserDto,
-    @Res() response: Response,
-  ) {
-    this.usersService.modifyUser(updateUserDto);
-    return new ApiResponse(response, 200, { message: 'Level upgraded' });
-  }
+  // @Post('/modifyUser')
+  // async modifyUserAccess(
+  //   @Body() updateUserDto: UpdateUserDto,
+  //   @Res() response: Response,
+  // ) {
+  //   this.usersService.modifyUser(updateUserDto);
+  //   return new ApiResponse(response, 200, { message: 'Level upgraded' });
+  // }
 }

@@ -20,8 +20,8 @@ export class Profiles{
     @Column( { nullable : false} )
     email: string
 
-    @Column({type:'varchar', length: 10})
-    phoneNo: bigint
+    @Column({type:'bigint'})
+    phoneNo: number
 
     @Column( { type: 'enum', enum: Gender, nullable: false})
     gender: Gender
