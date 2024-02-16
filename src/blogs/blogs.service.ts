@@ -39,7 +39,7 @@ export class BlogsService {
   }
 
   async viewSpecificBlog(id:number){
-    const blogDetails = await this.blogsRepository.findOne({where:{id:id}})
+    const blogDetails = await this.blogsRepository.findOne({where:{id:id}, select:["topic", "blog_name", "blog_owner", "created_at", "desc", "header", "body", "footer"]})
     return blogDetails
   }
 }
