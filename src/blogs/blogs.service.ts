@@ -24,14 +24,12 @@ export class BlogsService {
   }
 
   async updateBlog(id :number, updateBlogParams :UpdateBlogParams){
-    
-    let updateInfo = {}
 
     const blogDetails = await this.blogsRepository.findOne({where:{id:id}})
 
     for(let i in updateBlogParams){
       if(updateBlogParams[i].length !== 0){
-        blogDetails[updateInfo[i]] = updateBlogParams[i]
+        blogDetails[i] = updateBlogParams[i]
       }
     }
 
