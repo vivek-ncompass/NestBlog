@@ -75,21 +75,42 @@ export class TopicService {
 
   }
 
+  // async deleteRole(id:number, deleteRolesParams: DeleteRoleParams){
+  //   const topicData = await this.topicsRepository.findOne({where: {id:id},relations:[deleteRolesParams.role]})
+
+  //   let newRoleArr = []
+  //   for(let i = 0; i<topicData[deleteRolesParams.role].length; i++){
+  //     const role = topicData[deleteRolesParams.role][i]
+  //     if(!deleteRolesParams.evList.includes(role.username)){
+  //       newRoleArr.push(role)
+  //     }
+  //   }
+
+  //   topicData.editors = newRoleArr
+  //   topicData.updated_at = new Date()
+
+  //   return this.topicsRepository.save(topicData)
+  // }
+
+  // More Optimized Way to delete a list of users as editors or viewers
+
   async deleteRole(id:number, deleteRolesParams: DeleteRoleParams){
-    const topicData = await this.topicsRepository.findOne({where: {id:id},relations:[deleteRolesParams.role]})
+    try{   
+      const tableName = 'topics_'+deleteRolesParams.role+'_users'
+  
+      await this.topicsRepository.manager.transaction(async entityManager => {
+        await entityManager
+          .createQueryBuilder()
+          .delete()
+          .from(tableName)
+          .where('topicsId = :id AND usersId IN (:...evList)', { id, evList: deleteRolesParams.userArr })
+          .execute();
+      })
 
-    let newRoleArr = []
-    for(let i = 0; i<topicData[deleteRolesParams.role].length; i++){
-      const role = topicData[deleteRolesParams.role][i]
-      if(!deleteRolesParams.evList.includes(role.username)){
-        newRoleArr.push(role)
-      }
     }
-
-    topicData.editors = newRoleArr
-    topicData.updated_at = new Date()
-
-    return this.topicsRepository.save(topicData)
+    catch(error){
+      throw new CustomError(HttpStatus.BAD_REQUEST, {message:error.message})
+    }
   }
 
   async viewTopics(){
@@ -106,4 +127,5 @@ export class TopicService {
       throw new CustomError(HttpStatus.BAD_REQUEST, {message:error.message})
     }
   }
+
 }
