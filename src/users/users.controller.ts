@@ -5,6 +5,7 @@ import { ApiResponse } from 'src/utils/response';
 import { Response } from 'express';
 import { CustomError } from 'src/utils/customError';
 import { UpdateProfileDto } from './dtos/updateProfile.dto';
+import { ChangePasswordDto } from './dtos/changePassword.dto';
 
 
 @Controller('users')
@@ -45,5 +46,12 @@ export class UsersController {
       }
     }
   }
+
+  @Patch(':id')
+  async changeUserPassword(@Param('id') id:number, @Body() changePasswordDto: ChangePasswordDto, @Res() response: Response) {
+    const passwordChanged = await this.usersService.changePassword(id, changePasswordDto);
+
+    return new ApiResponse(response, 200, { message: "Password Changed successfully "})
+}
 
 }
