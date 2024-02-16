@@ -9,5 +9,6 @@ export type CreateUserTypes = {
     address: string,
     email: string,
     phoneNo: string,
-    gender: Gender
+    gender: Gender,
+    level: number
 }
