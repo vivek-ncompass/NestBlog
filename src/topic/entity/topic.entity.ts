@@ -30,8 +30,7 @@ export class Topics {
   @JoinTable()
   viewers:Users[]
 
-  @OneToMany(()=>Blogs, (blog) => blog.topic)
-  @JoinTable()
+  @OneToMany(()=>Blogs, blog => blog.topic_rel)
   blogs:Blogs[]
 
 }

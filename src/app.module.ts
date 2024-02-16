@@ -10,7 +10,8 @@ import { Topics } from './topic/entity/topic.entity';
 import { Blogs } from './blogs/entity/blogs.entity';
 import { TopicModule } from './topic/topic.module';
 import { BlogsModule } from './blogs/blogs.module';
-
+import { AuthModule } from './auth/auth.module';
+import { JwtModule } from '@nestjs/jwt';
 @Module({
   imports: [ 
     ConfigModule.forRoot({isGlobal: true}),
@@ -24,7 +25,7 @@ import { BlogsModule } from './blogs/blogs.module';
       entities:[Users, Profiles, Topics, Blogs],
       synchronize:true
     }),
-    UsersModule,TopicModule, BlogsModule
+    UsersModule,TopicModule, BlogsModule, AuthModule
   ],
   controllers: [AppController],
   providers: [AppService],

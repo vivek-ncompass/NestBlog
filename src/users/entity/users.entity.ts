@@ -1,4 +1,4 @@
-import { Column, CreateDateColumn, Entity, JoinColumn, OneToOne, PrimaryGeneratedColumn } from "typeorm";
+import { Column, Entity, JoinColumn, OneToOne, PrimaryGeneratedColumn } from "typeorm";
 import { Profiles } from "./profile.entity";
 
 export enum UserRole {
@@ -26,7 +26,7 @@ export class Users{
     @Column( { default: true, nullable : false })
     isActive: boolean;
 
-    @CreateDateColumn( { type: 'timestamp', nullable : false })
+    @Column( { type: 'timestamp', precision: 0, nullable : false, default: () => 'CURRENT_TIMESTAMP'})
     createdAt: Date;
 
     @Column({nullable:true, default: null})
