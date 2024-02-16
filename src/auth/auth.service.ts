@@ -5,7 +5,7 @@ import { Repository } from 'typeorm';
 import * as md5 from 'md5';
 import { CustomError } from 'src/utils/customError';
 import { JwtService } from '@nestjs/jwt';
-import { LoginUserType } from '../users/types/loginUser.type';
+import { LoginUserTypes } from '../auth/types/loginUser.type';
 
 @Injectable()
 export class AuthService {
@@ -16,7 +16,7 @@ export class AuthService {
     private readonly jwtService: JwtService,
  ){};
 
- async login(loginDetails: LoginUserType): Promise<any> {
+ async login(loginDetails: LoginUserTypes): Promise<any> {
 
     const { username, password } = loginDetails;
     const user = await this.userRepository.findOne({

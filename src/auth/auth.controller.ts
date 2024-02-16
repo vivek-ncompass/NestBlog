@@ -2,8 +2,7 @@ import { Body, Controller, Param, ParseIntPipe, Patch, Post, UnauthorizedExcepti
 import { TokenVerificationGuard } from './guard/tokenVerification.guard'
 import { UserLoginDto } from './dtos/UserLoginDto.dto';
 import { AuthService } from './auth.service';
-import { UpdateUserDto } from '../users/dtos/UpdateUserDto.dto';
-import { LoginUserDto } from 'src/users/dtos/loginuser.dto';
+// import { UpdateUserDto } from '../users/dtos/UpdateUserDto.dto';
 import { ApiResponse } from 'src/utils/response';
 import { CustomError } from 'src/utils/customError';
 
@@ -15,7 +14,7 @@ export class AuthController {
 
 
     @Post('login')
-    async login(@Body() loginUserDto: LoginUserDto, @Res() response: Response) {
+    async login(@Body() loginUserDto: UserLoginDto, @Res() response: Response) {
       try {
         const token = await this.authService.login(loginUserDto);
         return new ApiResponse(response, 200, { token });

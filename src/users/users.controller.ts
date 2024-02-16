@@ -1,10 +1,11 @@
-import { Body, Controller, HttpStatus, NotFoundException, Param, Post, Put, Res } from '@nestjs/common';
+import { Body, Controller, HttpStatus, NotFoundException, Param, Patch, Post, Put, Res } from '@nestjs/common';
 import { UsersService } from './users.service';
 import { CreateUserDto } from './dtos/createUser.dto';
 import { ApiResponse } from 'src/utils/response';
 import { Response } from 'express';
 import { CustomError } from 'src/utils/customError';
 import { UpdateProfileDto } from './dtos/updateProfile.dto';
+
 
 @Controller('users')
 export class UsersController {
@@ -31,10 +32,10 @@ export class UsersController {
     }
   }
 
-  @Put(':userId') 
+  @Put(':userId')
   async updateProfile(@Param('userId') id: number, @Body() updateProfileDto: UpdateProfileDto, @Res() response: Response) {
     try {
-      const updatedProfile = await this.usersService.updateProfile(id,updateProfileDto); 
+      const updatedProfile = await this.usersService.updateProfile(id,updateProfileDto);
       return new ApiResponse(response, 200, { message: "Profile updated successfully", profile: updatedProfile });
     } catch (error) {
       if (error instanceof NotFoundException) {
@@ -45,12 +46,4 @@ export class UsersController {
     }
   }
 
-  // @Post('/modifyUser')
-  // async modifyUserAccess(
-  //   @Body() updateUserDto: UpdateUserDto,
-  //   @Res() response: Response,
-  // ) {
-  //   this.usersService.modifyUser(updateUserDto);
-  //   return new ApiResponse(response, 200, { message: 'Level upgraded' });
-  // }
 }
