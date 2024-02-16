@@ -8,6 +8,7 @@ import { CustomError } from 'src/utils/customError';
 import { TopicUpdateGuard } from 'src/auth/guard/topicUpdate.guard';
 import { UpdateTopicDto } from './dto/updateTopic.dto';
 import { DeleteRolesDto } from './dto/deleteRoles.dto';
+import { ViewBlogFromTopicGuard } from 'src/auth/guard/viewBlogFromTopic.guard';
 
 @Controller("topic")
 export class TopicController {
@@ -52,7 +53,7 @@ export class TopicController {
 
   @UseGuards(TokenVerificationGuard, TopicUpdateGuard)
   @Delete("/role/:id")
-  async deleteRoles(@Param("id",ParseIntPipe) id:number,@Body() deleteRolesDto: DeleteRolesDto, @Res() response: Response){
+  async deleteRoles(@Param("id",ParseIntPipe) id:number, @Body() deleteRolesDto: DeleteRolesDto, @Res() response: Response){
     try{
       const updatedTopicData = await this.topicService.deleteRole(id, deleteRolesDto)
       new ApiResponse(response, 200, {message:"Editor or Viewers updated Successfully"})
@@ -67,6 +68,18 @@ export class TopicController {
   async viewTopics(@Res() response: Response){
     const topicDetails = await this.topicService.viewTopics()
     new ApiResponse(response, 200, {message:"Data fetched", topics: topicDetails})
+  }
+
+  @UseGuards(TokenVerificationGuard, ViewBlogFromTopicGuard)
+  @Get(":id")
+  async viewBlogsFromTopic(@Param("id",ParseIntPipe) id:number, @Res() response: Response){
+    try{
+      const blogsFromTopic = await this.topicService.viewBlogsFromTopic(id)
+      new ApiResponse(response, 200, {message:"Blogs fetched Successfully", blogs: blogsFromTopic})
+    }
+    catch(error){
+      throw new CustomError(HttpStatus.BAD_REQUEST, {message:error.message})
+    }
   }
   
 }
