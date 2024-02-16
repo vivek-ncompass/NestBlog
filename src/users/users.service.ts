@@ -1,16 +1,20 @@
-import { ConflictException, Injectable } from '@nestjs/common';
+import { ConflictException, Injectable, NotFoundException } from '@nestjs/common';
 import { CreateUserDto } from './dtos/createUser.dto';
 import { QueryFailedError, Repository } from 'typeorm';
 import { Users } from './entity/users.entity';
 import { InjectRepository } from '@nestjs/typeorm';
 import * as md5 from 'md5';
 import { CreateUserTypes } from './types/createUser.type';
+import { UpdateProfileType } from './types/updateProfile.type';
+import { Profiles } from './entity/profile.entity';
 
 @Injectable()
 export class UsersService {
 
    constructor(
-    @InjectRepository(Users) private userRepository: Repository<Users>){}
+    @InjectRepository(Users) private userRepository: Repository<Users>,
+    @InjectRepository(Profiles) private profileRepository: Repository<Profiles>
+    ){}
    
     async registerUser(userDetails : CreateUserTypes){
       try{
