@@ -6,7 +6,7 @@ export class Blogs {
   @PrimaryGeneratedColumn()
   id: number
 
-  @Column()
+  @Column({unique:true})
   topic:string
 
   @Column({ nullable: false, length:255})
@@ -14,7 +14,7 @@ export class Blogs {
 
   @Column({nullable:false})
   desc:string
-
+  
   @Column({nullable:false})
   blog_owner: string
 

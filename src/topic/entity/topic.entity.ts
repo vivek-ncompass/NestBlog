@@ -7,7 +7,7 @@ export class Topics {
   @PrimaryGeneratedColumn()
   id: number
 
-  @Column({ nullable: false, length:255})
+  @Column({ nullable: false, length:255, unique:true})
   topic_name: string
 
   @Column({nullable:false})
