@@ -21,7 +21,7 @@ export class Profiles{
     email: string
 
     @Column({type:'varchar', length: 10})
-    phoneNo: string
+    phoneNo: bigint
 
     @Column( { type: 'enum', enum: Gender, nullable: false})
     gender: Gender

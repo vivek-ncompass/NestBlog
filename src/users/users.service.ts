@@ -1,29 +1,43 @@
-
-import { HttpStatus, Injectable } from '@nestjs/common';
+import { ConflictException, Injectable, NotFoundException } from '@nestjs/common';
+import { CreateUserDto } from './dtos/createUser.dto';
 import { QueryFailedError, Repository } from 'typeorm';
 import { Users } from './entity/users.entity';
 import { InjectRepository } from '@nestjs/typeorm';
 import * as md5 from 'md5';
 import { CreateUserTypes } from './types/createUser.type';
+import { UpdateProfileType } from './types/updateProfile.type';
 import { Profiles } from './entity/profile.entity';
-import { modifyUser } from './types/modifyUserRole.type';
-import { CustomError } from 'src/utils/customError';
-
 
 @Injectable()
 export class UsersService {
-  constructor(
-    @InjectRepository(Users) private userRepository: Repository<Users>,
-    @InjectRepository(Profiles) private profileRepository: Repository<Profiles>,
-  ) {}
 
-  async findUserByUsername(username: string) {
-    const user = await this.userRepository.findOne({ where: { username } });
-    if (!user) {
-      throw new Error('user not found');
+   constructor(
+    @InjectRepository(Users) private userRepository: Repository<Users>,
+    @InjectRepository(Profiles) private profileRepository: Repository<Profiles>
+    ){}
+   
+    async registerUser(userDetails : CreateUserTypes){
+      try{
+        const hashedPw = md5(userDetails.password);
+
+        const res1 = this.userRepository.create({
+          username: userDetails.username,
+          password: hashedPw,
+          level: userDetails.level
+        })
+
+        const ans = await this.userRepository.save(res1)
+        return ans
+      }
+
+      catch(error){
+        if(error instanceof QueryFailedError && error.message.includes('duplicate key value')){
+            throw new ConflictException('Username already exists')
+        }
+        else{
+        throw new Error('Failed to register User');
+      }
     }
-    return user;
-  }
 
   async registerUser(userDetails: CreateUserTypes) {
     try {
@@ -49,13 +63,23 @@ export class UsersService {
     throw new Error('Failed to register User');
   }
 
-  async modifyUser(modifyUserDetails: modifyUser) {
-    const { username, level } = modifyUserDetails;
-    const user = await this.userRepository.findOne({ where: { username } });
-    if (!user) {
-      throw new Error(`User with name ${username} not found`);
+  async updateProfile(id: number, updateProfile:UpdateProfileType){
+    try{
+      const profile = await this.profileRepository.findOne({where:{id}});
+      if(!profile){
+        throw new NotFoundException('Unable to find Profile');
+      }
+      Object.assign(profile, updateProfile);
+      return profile;
+    } catch (error) {
+      if (error instanceof NotFoundException) {
+        throw new NotFoundException('Profile not found');
+      } else {
+        throw new Error('Failed to update profile');
+      }
     }
-    user.level = level;
-    await this.userRepository.save(user);
-  }
-}
+      }
+      
+  }     
+    
+

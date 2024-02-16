@@ -25,7 +25,7 @@ export class CreateUserDto{
 
     @IsPhoneNumber()
     @IsNotEmpty() 
-    phoneNo: string
+    phoneNo: bigint
 
     @IsString() 
     @IsNotEmpty()  
