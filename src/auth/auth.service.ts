@@ -5,7 +5,8 @@ import { Repository } from 'typeorm';
 import * as md5 from 'md5';
 import { CustomError } from 'src/utils/customError';
 import { JwtService } from '@nestjs/jwt';
-import { LoginUserTypes } from '../auth/types/loginUser.type';
+import { LoginUserTypes } from './types/loginUser.type';
+
 
 @Injectable()
 export class AuthService {
