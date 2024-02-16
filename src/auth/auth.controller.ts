@@ -2,7 +2,7 @@ import { Body, Controller, Param, ParseIntPipe, Patch, Post, UnauthorizedExcepti
 import { TokenVerificationGuard } from './guard/tokenVerification.guard'
 import { UserLoginDto } from './dtos/UserLoginDto.dto';
 import { AuthService } from './auth.service';
-import { UpdateUserDto } from './dtos/UpdateUserDto.dto';
+import { UpdateUserDto } from '../users/dtos/UpdateUserDto.dto';
 import { LoginUserDto } from 'src/users/dtos/loginuser.dto';
 import { ApiResponse } from 'src/utils/response';
 import { CustomError } from 'src/utils/customError';
@@ -30,9 +30,5 @@ export class AuthController {
       }
     }
 
-    @Post('/modifyUser')
-    async modifyUserAccess(@Body() updateUserDto : UpdateUserDto, @Res() response:  Response) {
-        this.authService.modifyUser(updateUserDto);
-        return new ApiResponse(response, 200, { message: "Level upgraded" } )
-    }
+   
 }
