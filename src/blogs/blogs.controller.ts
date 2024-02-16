@@ -1,4 +1,4 @@
-import { Body, Controller, HttpStatus, Param, ParseIntPipe, Patch, Post, Request, Res, UseGuards } from '@nestjs/common';
+import { Body, Controller, Get, HttpStatus, Param, ParseIntPipe, Patch, Post, Request, Res, UseGuards } from '@nestjs/common';
 import { BlogsService } from './blogs.service';
 import { CreateBlogDto } from './dto/createBlog.dto';
 import { ApiResponse } from 'src/utils/response';
@@ -7,6 +7,7 @@ import { TokenVerificationGuard } from 'src/auth/guard/tokenVerification.guard';
 import { BlogCreatorVerificationGuard } from 'src/auth/guard/blogCreatorVerification.guard';
 import { BlogEditorVerificationGuard } from 'src/auth/guard/blogEditorVerification.guard';
 import { CustomError } from 'src/utils/customError';
+import { ViewBlogVerificaiton } from 'src/auth/guard/viewBlog.guard';
 
 @Controller("blogs")
 export class BlogsController {
@@ -35,6 +36,18 @@ export class BlogsController {
     }
     catch(error){
       throw new CustomError(HttpStatus.BAD_GATEWAY, {message:error.message})
+    }
+  }
+
+  @UseGuards(TokenVerificationGuard, ViewBlogVerificaiton)
+  @Get(":id")
+  async viewBlog(@Param("id", ParseIntPipe) id:number, @Res() response:Response){
+    try{
+      const blogDetails = await this.blogsService.viewSpecificBlog(id)
+      new ApiResponse(response, 200, {message:"Blog fetched", blog:blogDetails})
+    }
+    catch(error){
+      throw new CustomError(HttpStatus.BAD_REQUEST, {message:error.message})
     }
   }
 }
