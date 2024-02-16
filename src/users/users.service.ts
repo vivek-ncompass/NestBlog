@@ -1,5 +1,4 @@
-import { ConflictException, Injectable, NotFoundException } from '@nestjs/common';
-import { CreateUserDto } from './dtos/createUser.dto';
+import { HttpStatus, Injectable, NotFoundException } from '@nestjs/common';
 import { QueryFailedError, Repository } from 'typeorm';
 import { Users } from './entity/users.entity';
 import { InjectRepository } from '@nestjs/typeorm';
@@ -7,6 +6,7 @@ import * as md5 from 'md5';
 import { CreateUserTypes } from './types/createUser.type';
 import { UpdateProfileType } from './types/updateProfile.type';
 import { Profiles } from './entity/profile.entity';
+import { CustomError } from 'src/utils/customError';
 
 @Injectable()
 export class UsersService {
@@ -15,29 +15,7 @@ export class UsersService {
     @InjectRepository(Users) private userRepository: Repository<Users>,
     @InjectRepository(Profiles) private profileRepository: Repository<Profiles>
     ){}
-   
-    async registerUser(userDetails : CreateUserTypes){
-      try{
-        const hashedPw = md5(userDetails.password);
-
-        const res1 = this.userRepository.create({
-          username: userDetails.username,
-          password: hashedPw,
-          level: userDetails.level
-        })
-
-        const ans = await this.userRepository.save(res1)
-        return ans
-      }
-
-      catch(error){
-        if(error instanceof QueryFailedError && error.message.includes('duplicate key value')){
-            throw new ConflictException('Username already exists')
-        }
-        else{
-        throw new Error('Failed to register User');
-      }
-    }
+  
 
   async registerUser(userDetails: CreateUserTypes) {
     try {
