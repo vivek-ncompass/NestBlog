@@ -79,7 +79,6 @@ export class TopicService {
     const topicData = await this.topicsRepository.findOne({where: {id:id},relations:[deleteRolesParams.role]})
 
     let newRoleArr = []
-    console.log(topicData[deleteRolesParams.role])
     for(let i = 0; i<topicData[deleteRolesParams.role].length; i++){
       const role = topicData[deleteRolesParams.role][i]
       if(!deleteRolesParams.evList.includes(role.username)){
