@@ -9,7 +9,6 @@ import { UpdateUserDto } from './dtos/UpdateUserDto.dto';
 @Controller('users')
 export class UsersController {
   constructor(private readonly usersService: UsersService) {}
-
   @Post()
   async registerUser(
     @Body() createUserDto: CreateUserDto,
@@ -17,7 +16,7 @@ export class UsersController {
   ) {
     try {
       const createdUser = await this.usersService.registerUser(createUserDto);
-
+      
       return new ApiResponse(response, 200, { message: 'User Created' });
     } 
     catch (error) {

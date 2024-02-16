@@ -16,7 +16,6 @@ export class TokenVerificationGuard implements CanActivate {
     try{
         const decodedToken = this.jwtService.verify(token)
         request.payload = decodedToken;
-        console.log(decodedToken)
         return true;
     }
     catch(error){

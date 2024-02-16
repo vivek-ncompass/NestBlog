@@ -13,7 +13,6 @@ export class BlogEditorVerificationGuard implements CanActivate{
   async canActivate(context: ExecutionContext): Promise<boolean> {
     
     const request = context.switchToHttp().getRequest()
-    const response = context.switchToHttp().getResponse()
     const id = request.param.id
 
     try{
@@ -23,12 +22,12 @@ export class BlogEditorVerificationGuard implements CanActivate{
         throw new CustomError(404, {message:"Cannot update other's Blog"})
       }
 
-      const topicDetails = await this.topicsRepository.findOne({where:{topic_name:blogDetails.topic}, relations:['users']})
+      const topicDetails = await this.topicsRepository.findOne({where:{topic_name:blogDetails.topic}, relations:['editors']})
 
       const editors = topicDetails.editors
 
       for(let i = 0; i<editors.length; i++){
-        if(editors[i].username === response.payload.username){
+        if(editors[i].username === request.payload.username){
           return true
         }
       }

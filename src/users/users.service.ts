@@ -1,3 +1,4 @@
+
 import { HttpStatus, Injectable } from '@nestjs/common';
 import { QueryFailedError, Repository } from 'typeorm';
 import { Users } from './entity/users.entity';
@@ -7,6 +8,7 @@ import { CreateUserTypes } from './types/createUser.type';
 import { Profiles } from './entity/profile.entity';
 import { modifyUser } from './types/modifyUserRole.type';
 import { CustomError } from 'src/utils/customError';
+
 
 @Injectable()
 export class UsersService {

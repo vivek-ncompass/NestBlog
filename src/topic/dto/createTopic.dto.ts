@@ -13,7 +13,7 @@ export class TopicDtoParams{
   @IsArray()
   @IsString({each:true})
   editors: string[]
-
+  
   @IsArray()
   @IsString({each:true})
   viewers: string[]
