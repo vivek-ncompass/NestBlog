@@ -42,4 +42,8 @@ export class BlogsService {
     const blogDetails = await this.blogsRepository.findOne({where:{id:id}, select:["topic", "blog_name", "blog_owner", "created_at", "desc", "header", "body", "footer"]})
     return blogDetails
   }
+  
+  async deleteBlog(id:number){
+    await this.blogsRepository.delete(id)
+  }
 }
