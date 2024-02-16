@@ -97,4 +97,14 @@ export class TopicService {
     const topicData = await this.topicsRepository.find({select:['topic_name', 'desc', 'topic_owner']})
     return topicData
   }
+
+  async viewBlogsFromTopic(id:number){
+    try{
+      const blogsFromTopic = await this.topicsRepository.findOne({where:{id:id}, relations:['blogs']})
+      return blogsFromTopic
+    }
+    catch(error){
+      throw new CustomError(HttpStatus.BAD_REQUEST, {message:error.message})
+    }
+  }
 }
