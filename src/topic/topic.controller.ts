@@ -1,4 +1,4 @@
-import { Body, Controller, HttpStatus, Param, ParseIntPipe, Patch, Post, Request, Res, UseGuards } from '@nestjs/common';
+import { Body, Controller, Delete, HttpStatus, Param, ParseIntPipe, Patch, Post, Request, Res, UseGuards } from '@nestjs/common';
 import { TopicService } from './topic.service';
 import { TopicDtoParams } from './dto/createTopic.dto';
 import { Response } from 'express';
@@ -7,6 +7,7 @@ import { TokenVerificationGuard } from 'src/auth/guard/tokenVerification.guard';
 import { CustomError } from 'src/utils/customError';
 import { TopicUpdateGuard } from 'src/auth/guard/topicUpdate.guard';
 import { UpdateTopicDto } from './dto/updateTopic.dto';
+import { DeleteRolesDto } from './dto/deleteRoles.dto';
 
 @Controller("topic")
 export class TopicController {
@@ -47,6 +48,19 @@ export class TopicController {
       throw new CustomError(HttpStatus.BAD_GATEWAY, {message:error.message})
     }
     
+  }
+
+  @UseGuards(TokenVerificationGuard, TopicUpdateGuard)
+  @Delete("/role/:id")
+  async deleteEditor(@Param("id",ParseIntPipe) id:number,@Body() deleteRolesDto: DeleteRolesDto, @Res() response: Response){
+    try{
+      console.log(deleteRolesDto)
+      const updatedTopicData = await this.topicService.deleteEditor(id, deleteRolesDto)
+      new ApiResponse(response, 200, {message:"Editor or Viewers updated Successfully"})
+    }
+    catch(error){
+      throw new CustomError(HttpStatus.BAD_REQUEST, {message:error.message})
+    }
   }
 
   
