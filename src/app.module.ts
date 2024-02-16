@@ -11,7 +11,9 @@ import { Blogs } from './blogs/entity/blogs.entity';
 import { TopicModule } from './topic/topic.module';
 import { BlogsModule } from './blogs/blogs.module';
 import { AuthModule } from './auth/auth.module';
-import { JwtModule } from '@nestjs/jwt';
+import { APP_FILTER } from '@nestjs/core';
+import { GlobalExceptionFilter } from './utils/globalErrorHandler';
+
 @Module({
   imports: [ 
     ConfigModule.forRoot({isGlobal: true}),
@@ -28,6 +30,9 @@ import { JwtModule } from '@nestjs/jwt';
     UsersModule,TopicModule, BlogsModule, AuthModule
   ],
   controllers: [AppController],
-  providers: [AppService],
+  providers: [
+    AppService,
+    {provide:APP_FILTER, useClass: GlobalExceptionFilter}
+  ],
 })
 export class AppModule {}
