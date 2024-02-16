@@ -19,6 +19,6 @@ import { ConfigModule } from '@nestjs/config';
     }),
   ],
   controllers: [BlogsController],
-  providers: [BlogsService, JwtService]
+  providers: [BlogsService]
 })
 export class BlogsModule {}

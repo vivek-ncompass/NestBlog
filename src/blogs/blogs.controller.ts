@@ -1,4 +1,4 @@
-import { Body, Controller, HttpStatus, Param, ParseIntPipe, Patch, Post, Request, Res, UseGuards } from '@nestjs/common';
+import { Body, Controller, Delete, HttpStatus, Param, ParseIntPipe, Patch, Post, Request, Res, UseGuards } from '@nestjs/common';
 import { BlogsService } from './blogs.service';
 import { CreateBlogDto } from './dto/createBlog.dto';
 import { ApiResponse } from 'src/utils/response';
@@ -7,6 +7,7 @@ import { TokenVerificationGuard } from 'src/auth/guard/tokenVerification.guard';
 import { BlogCreatorVerificationGuard } from 'src/auth/guard/blogCreatorVerification.guard';
 import { BlogEditorVerificationGuard } from 'src/auth/guard/blogEditorVerification.guard';
 import { CustomError } from 'src/utils/customError';
+import { DeleteBlogGuard } from 'src/auth/guard/deleteBlog.guard';
 
 @Controller("blogs")
 export class BlogsController {
@@ -35,6 +36,18 @@ export class BlogsController {
     }
     catch(error){
       throw new CustomError(HttpStatus.BAD_GATEWAY, {message:error.message})
+    }
+  }
+
+  @UseGuards(TokenVerificationGuard, DeleteBlogGuard)
+  @Delete(":id")
+  async deleteBlog(@Param("id", ParseIntPipe) id:number, @Res() response:Response){
+    try{
+      await this.blogsService.deleteBlog(id)
+      new ApiResponse(response, 200, {message:"Blog Deleted Successfully!"})
+    }
+    catch(error){
+      throw new CustomError(HttpStatus.BAD_REQUEST, {message:error.message})
     }
   }
 }
