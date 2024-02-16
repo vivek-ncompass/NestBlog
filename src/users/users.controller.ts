@@ -1,4 +1,4 @@
-import { Body, Controller, HttpStatus, NotFoundException, Param, Patch, Post, Put, Res } from '@nestjs/common';
+import { Body, Controller, HttpStatus, NotFoundException, Param, Patch, Post, Put, Res, UseGuards } from '@nestjs/common';
 import { UsersService } from './users.service';
 import { CreateUserDto } from './dtos/createUser.dto';
 import { ApiResponse } from 'src/utils/response';
@@ -6,15 +6,16 @@ import { Response } from 'express';
 import { CustomError } from 'src/utils/customError';
 import { UpdateProfileDto } from './dtos/updateProfile.dto';
 import { ChangePasswordDto } from './dtos/changePassword.dto';
+import { ChangeLevelDto } from './dtos/changeLevel.dto';
+import { TokenVerificationGuard } from 'src/auth/guard/tokenVerification.guard';
+import { ChangeLevelGuard } from 'src/auth/guard/changeLevelGuard.guard';
 
 
 @Controller('users')
 export class UsersController {
   constructor(private readonly usersService: UsersService) {}
   @Post()
-  async registerUser(
-    @Body() createUserDto: CreateUserDto,
-    @Res() response: Response,
+  async registerUser(@Body() createUserDto: CreateUserDto,@Res() response: Response,
   ) {
     try {
       const createdUser = await this.usersService.registerUser(createUserDto);
@@ -50,8 +51,15 @@ export class UsersController {
   @Patch(':id')
   async changeUserPassword(@Param('id') id:number, @Body() changePasswordDto: ChangePasswordDto, @Res() response: Response) {
     const passwordChanged = await this.usersService.changePassword(id, changePasswordDto);
-
     return new ApiResponse(response, 200, { message: "Password Changed successfully "})
-}
+  }
+
+
+  @UseGuards(TokenVerificationGuard, ChangeLevelGuard)
+  @Patch()
+  async changeLevel(@Res() response: Response, @Body() changeLevelDto: ChangeLevelDto){
+    const changedLevel = await this.usersService.changeLevel(changeLevelDto)
+    new ApiResponse(response, 200, {message:"Level of the user changed"})
+  }
 
 }
