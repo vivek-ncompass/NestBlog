@@ -52,16 +52,15 @@ export class TopicController {
 
   @UseGuards(TokenVerificationGuard, TopicUpdateGuard)
   @Delete("/role/:id")
-  async deleteEditor(@Param("id",ParseIntPipe) id:number,@Body() deleteRolesDto: DeleteRolesDto, @Res() response: Response){
+  async deleteRoles(@Param("id",ParseIntPipe) id:number,@Body() deleteRolesDto: DeleteRolesDto, @Res() response: Response){
     try{
       console.log(deleteRolesDto)
-      const updatedTopicData = await this.topicService.deleteEditor(id, deleteRolesDto)
+      const updatedTopicData = await this.topicService.deleteRole(id, deleteRolesDto)
       new ApiResponse(response, 200, {message:"Editor or Viewers updated Successfully"})
     }
     catch(error){
       throw new CustomError(HttpStatus.BAD_REQUEST, {message:error.message})
     }
   }
-
   
 }
