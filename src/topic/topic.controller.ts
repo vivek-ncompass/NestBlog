@@ -1,4 +1,4 @@
-import { Body, Controller, Delete, HttpStatus, Param, ParseIntPipe, Patch, Post, Request, Res, UseGuards } from '@nestjs/common';
+import { Body, Controller, Delete, Get, HttpStatus, Param, ParseIntPipe, Patch, Post, Request, Res, UseGuards } from '@nestjs/common';
 import { TopicService } from './topic.service';
 import { TopicDtoParams } from './dto/createTopic.dto';
 import { Response } from 'express';
@@ -54,13 +54,19 @@ export class TopicController {
   @Delete("/role/:id")
   async deleteRoles(@Param("id",ParseIntPipe) id:number,@Body() deleteRolesDto: DeleteRolesDto, @Res() response: Response){
     try{
-      console.log(deleteRolesDto)
       const updatedTopicData = await this.topicService.deleteRole(id, deleteRolesDto)
       new ApiResponse(response, 200, {message:"Editor or Viewers updated Successfully"})
     }
     catch(error){
       throw new CustomError(HttpStatus.BAD_REQUEST, {message:error.message})
     }
+  }
+
+  @UseGuards(TokenVerificationGuard)
+  @Get()
+  async viewTopics(@Res() response: Response){
+    const topicDetails = await this.topicService.viewTopics()
+    new ApiResponse(response, 200, {message:"Data fetched", topics: topicDetails})
   }
   
 }

@@ -1,9 +1,6 @@
-import { Body, Controller, Param, ParseIntPipe, Patch, Post, UnauthorizedException, Res } from '@nestjs/common';
-import { TokenVerificationGuard } from './guard/tokenVerification.guard'
+import { Body, Controller, Post, UnauthorizedException, Res } from '@nestjs/common';
 import { UserLoginDto } from './dtos/UserLoginDto.dto';
 import { AuthService } from './auth.service';
-import { UpdateUserDto } from '../users/dtos/UpdateUserDto.dto';
-import { LoginUserDto } from 'src/users/dtos/loginuser.dto';
 import { ApiResponse } from 'src/utils/response';
 import { CustomError } from 'src/utils/customError';
 
@@ -15,7 +12,7 @@ export class AuthController {
 
 
     @Post('login')
-    async login(@Body() loginUserDto: LoginUserDto, @Res() response: Response) {
+    async login(@Body() loginUserDto: UserLoginDto, @Res() response: Response) {
       try {
         const token = await this.authService.login(loginUserDto);
         return new ApiResponse(response, 200, { token });
