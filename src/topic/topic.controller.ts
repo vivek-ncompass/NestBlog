@@ -1,10 +1,12 @@
-import { Body, Controller, HttpStatus, Post, Request, Res, UseGuards } from '@nestjs/common';
+import { Body, Controller, HttpStatus, Param, ParseIntPipe, Patch, Post, Request, Res, UseGuards } from '@nestjs/common';
 import { TopicService } from './topic.service';
 import { TopicDtoParams } from './dto/createTopic.dto';
 import { Response } from 'express';
 import { ApiResponse } from 'src/utils/response';
 import { TokenVerificationGuard } from 'src/auth/guard/tokenVerification.guard';
 import { CustomError } from 'src/utils/customError';
+import { TopicUpdateGuard } from 'src/auth/guard/topicUpdate.guard';
+import { UpdateTopicDto } from './dto/updateTopic.dto';
 
 @Controller("topic")
 export class TopicController {
@@ -23,6 +25,28 @@ export class TopicController {
     catch(error){
       throw new CustomError(HttpStatus.BAD_GATEWAY, {message:"Something Went Wrong"})
     }
+  }
+
+  @UseGuards(TokenVerificationGuard, TopicUpdateGuard)
+  @Patch(":id")
+  async updateTopic(@Param("id",ParseIntPipe) id:number, @Body() updateTopicDto : UpdateTopicDto, @Res() response: Response){
+    try{
+
+      if(!updateTopicDto.editors){
+        updateTopicDto.editors = []
+      }
+
+      if(!updateTopicDto.viewers){
+        updateTopicDto.viewers = []
+      }
+
+      const updatedTopicData = await this.topicService.updateTopic(id, updateTopicDto)
+      new ApiResponse(response, 200, {message:"Topic Updated Successfully"})
+    }
+    catch(error){
+      throw new CustomError(HttpStatus.BAD_GATEWAY, {message:error.message})
+    }
+    
   }
 
   

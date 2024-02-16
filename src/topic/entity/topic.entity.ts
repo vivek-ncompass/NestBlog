@@ -1,6 +1,6 @@
 import { Blogs } from "src/blogs/entity/blogs.entity"
 import { Users } from "src/users/entity/users.entity"
-import { Column, CreateDateColumn, Entity, JoinColumn, JoinTable, ManyToMany, OneToMany, PrimaryGeneratedColumn } from "typeorm"
+import { Column, CreateDateColumn, Entity, JoinTable, ManyToMany, OneToMany, PrimaryGeneratedColumn } from "typeorm"
 
 @Entity({name:'topics'})
 export class Topics {
