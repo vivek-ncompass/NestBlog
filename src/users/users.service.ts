@@ -7,6 +7,7 @@ import { CreateUserTypes } from './types/createUser.type';
 import { UpdateProfileType } from './types/updateProfile.type';
 import { Profiles } from './entity/profile.entity';
 import { CustomError } from 'src/utils/customError';
+import { ChangePasswordType } from './types/changePassword.type';
 
 @Injectable()
 export class UsersService {
@@ -59,4 +60,20 @@ export class UsersService {
       }
     }
       }
-    }
+    
+      async changePassword(id: number, changePasswordUser : ChangePasswordType){
+        const user = await this.userRepository.findOne({where: {id}})
+        if(!user){
+          throw new NotFoundException('User Not Found')
+        }
+        user.updatedAt = new Date();
+        user.password = md5(changePasswordUser.password)
+        try{
+          const passwordChanged = await this.userRepository.save(user); 
+          return passwordChanged;
+        }
+        catch(error){
+          throw new Error('Failed to change the password')
+        };
+      }
+  }
