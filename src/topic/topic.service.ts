@@ -92,4 +92,9 @@ export class TopicService {
 
     return this.topicsRepository.save(topicData)
   }
+
+  async viewTopics(){
+    const topicData = await this.topicsRepository.find({select:['topic_name', 'desc', 'topic_owner']})
+    return topicData
+  }
 }
