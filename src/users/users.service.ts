@@ -35,15 +35,11 @@ export class UsersService {
       return savedUser;
     } 
     catch (error) {
-      if (error instanceof QueryFailedError)
-        throw new CustomError(HttpStatus.BAD_REQUEST, {
-          message: 'Username already exists',
-        });
-    }
-    throw new Error('Failed to register User');
+    throw new CustomError(HttpStatus.BAD_REQUEST, { message: error.message});
   }
+}
 
-  async updateProfile(id: number, updateProfile:UpdateProfileType){
+  async updateProfile(id: string, updateProfile:UpdateProfileType){
     try{
       const profile = await this.profileRepository.findOne({where:{id}});
       if(!profile){
@@ -63,7 +59,7 @@ export class UsersService {
     }
   }
     
-  async changePassword(id: number, changePasswordUser : ChangePasswordType){
+  async changePassword(id: string, changePasswordUser : ChangePasswordType){
     const user = await this.userRepository.findOne({where: {id}})
     if(!user){
       throw new NotFoundException('User Not Found')

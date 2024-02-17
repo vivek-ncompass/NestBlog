@@ -8,8 +8,8 @@ enum Gender {
 @Entity( { name: 'profiles'})
 export class Profiles{
 
-    @PrimaryGeneratedColumn()
-    id: number;
+    @PrimaryGeneratedColumn('uuid')
+    id: string;
 
     @Column( { nullable : false, unique:true} )
     username: string;

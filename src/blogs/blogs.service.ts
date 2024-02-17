@@ -23,7 +23,7 @@ export class BlogsService {
     return await this.blogsRepository.save(blogDetails)
   }
 
-  async updateBlog(id :number, updateBlogParams :UpdateBlogParams){
+  async updateBlog(id :string, updateBlogParams :UpdateBlogParams){
 
     const blogDetails = await this.blogsRepository.findOne({where:{id:id}})
 
@@ -38,12 +38,12 @@ export class BlogsService {
     return this.blogsRepository.save(blogDetails)
   }
 
-  async viewSpecificBlog(id:number){
+  async viewSpecificBlog(id:string){
     const blogDetails = await this.blogsRepository.findOne({where:{id:id}, select:["topic", "blog_name", "blog_owner", "created_at", "desc", "header", "body", "footer"]})
     return blogDetails
   }
   
-  async deleteBlog(id:number){
+  async deleteBlog(id:string){
     await this.blogsRepository.delete(id)
   }
 }

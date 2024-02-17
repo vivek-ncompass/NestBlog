@@ -20,7 +20,7 @@ export class BlogsController {
   async createBlog(@Body(ValidationPipe) createBlogDto:CreateBlogDto, @Res() response: Response, @Request() request){
     try{
       const createBlogData = await this.blogsService.createBlog({...createBlogDto, blog_owner: request.payload.username})
-      new ApiResponse(response, 200, {messgae: "Blog Created"})
+      new ApiResponse(response, 200, {message: "Blog Created"})
     }
     catch(error){
       throw new CustomError(HttpStatus.BAD_GATEWAY, {message:error.message})
@@ -30,7 +30,7 @@ export class BlogsController {
 
   @UseGuards(TokenVerificationGuard, BlogEditorVerificationGuard)
   @Patch(":id")
-  updateBlog(@Param('id',ParseIntPipe) id:number, @Body(ValidationPipe) updateBlogDto: UpdateBlogDto, @Res() response:Response){
+  updateBlog(@Param('id') id:string, @Body(ValidationPipe) updateBlogDto: UpdateBlogDto, @Res() response:Response){
     try{
       const updateBlogData = this.blogsService.updateBlog(id,updateBlogDto)
       new ApiResponse(response, 200, {message:"Blog Updated Successfully"})
@@ -42,7 +42,7 @@ export class BlogsController {
 
   @UseGuards(TokenVerificationGuard, DeleteBlogGuard)
   @Delete(":id")
-  async deleteBlog(@Param("id", ParseIntPipe) id:number, @Res() response:Response){
+  async deleteBlog(@Param("id") id:string, @Res() response:Response){
     try{
       await this.blogsService.deleteBlog(id)
       new ApiResponse(response, 200, {message:"Blog Deleted Successfully!"})
@@ -54,7 +54,7 @@ export class BlogsController {
 
   @UseGuards(TokenVerificationGuard, ViewBlogVerificaiton)
   @Get(":id")
-  async viewBlog(@Param("id", ParseIntPipe) id:number, @Res() response:Response){
+  async viewBlog(@Param("id") id:string, @Res() response:Response){
     try{
       const blogDetails = await this.blogsService.viewSpecificBlog(id)
       new ApiResponse(response, 200, {message:"Blog fetched", blog:blogDetails})

@@ -9,33 +9,25 @@ import { ChangePasswordDto } from './dtos/changePassword.dto';
 import { ChangeLevelDto } from './dtos/changeLevel.dto';
 import { TokenVerificationGuard } from 'src/auth/guard/tokenVerification.guard';
 import { ChangeLevelGuard } from 'src/auth/guard/changeLevelGuard.guard';
+import { log } from 'console';
 
 
 @Controller('users')
 export class UsersController {
   constructor(private readonly usersService: UsersService) {}
   @Post()
-  async registerUser(@Body(ValidationPipe) createUserDto: CreateUserDto,@Res() response: Response,
+  async registerUser(@Body() createUserDto: CreateUserDto,@Res() response: Response,
   ) {
     try {
-      const createdUser = await this.usersService.registerUser(createUserDto);
-
+      const createdUser = await this.usersService.registerUser(createUserDto);     
       return new ApiResponse(response, 200, { message: 'User Created' });
     } catch (error) {
-      if (
-        error instanceof CustomError &&
-        error.responseObject.message === 'Username already exists'
-      ) {
-        return new ApiResponse(response, HttpStatus.BAD_REQUEST, {
-          message: error.message,
-        });
-      }
-      throw new CustomError(404, { message: 'User not created' });
+      throw new CustomError(404, { message: error.message });
     }
   }
 
   @Put(':userId')
-  async updateProfile(@Param('userId') id: number, @Body(ValidationPipe) updateProfileDto: UpdateProfileDto, @Res() response: Response) {
+  async updateProfile(@Param('userId') id: string, @Body(ValidationPipe) updateProfileDto: UpdateProfileDto, @Res() response: Response) {
     try {
       const updatedProfile = await this.usersService.updateProfile(id,updateProfileDto);
       return new ApiResponse(response, 200, { message: "Profile updated successfully", profile: updatedProfile });
@@ -49,7 +41,7 @@ export class UsersController {
   }
 
   @Patch(':id')
-  async changeUserPassword(@Param('id') id:number, @Body(ValidationPipe) changePasswordDto: ChangePasswordDto, @Res() response: Response) {
+  async changeUserPassword(@Param('id') id:string, @Body(ValidationPipe) changePasswordDto: ChangePasswordDto, @Res() response: Response) {
     const passwordChanged = await this.usersService.changePassword(id, changePasswordDto);
     return new ApiResponse(response, 200, { message: "Password Changed successfully "})
   }
