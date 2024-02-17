@@ -32,7 +32,7 @@ export class TopicController {
 
   @UseGuards(TokenVerificationGuard, TopicUpdateGuard)
   @Patch(":id")
-  async updateTopic(@Param("id",ParseIntPipe) id:number, @Body(ValidationPipe) updateTopicDto : UpdateTopicDto, @Res() response: Response){
+  async updateTopic(@Param("id") id:string, @Body(ValidationPipe) updateTopicDto : UpdateTopicDto, @Res() response: Response){
     try{
 
       if(!updateTopicDto.editors){
@@ -54,7 +54,7 @@ export class TopicController {
 
   @UseGuards(TokenVerificationGuard, TopicUpdateGuard)
   @Delete("/role/:id")
-  async deleteRoles(@Param("id",ParseIntPipe) id:number, @Body(ValidationPipe) deleteRolesDto: DeleteRolesDto, @Res() response: Response){
+  async deleteRoles(@Param("id") id:string, @Body(ValidationPipe) deleteRolesDto: DeleteRolesDto, @Res() response: Response){
     try{
       const updatedTopicData = await this.topicService.deleteRole(id, deleteRolesDto)
       new ApiResponse(response, 200, {message:"Editor or Viewers updated Successfully"})
@@ -73,7 +73,7 @@ export class TopicController {
 
   @UseGuards(TokenVerificationGuard, ViewBlogFromTopicGuard)
   @Get(":id")
-  async viewBlogsFromTopic(@Param("id",ParseIntPipe) id:number, @Res() response: Response){
+  async viewBlogsFromTopic(@Param("id") id:string, @Res() response: Response){
     try{
       const blogsFromTopic = await this.topicService.viewBlogsFromTopic(id)
       new ApiResponse(response, 200, {message:"Blogs fetched Successfully", blogs: blogsFromTopic})

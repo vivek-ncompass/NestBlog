@@ -43,7 +43,7 @@ export class TopicService {
     return this.topicsRepository.save(createTopicData);
   }
 
-  async updateTopic(id:number, updateTopicParams: UpdateTopicParams){
+  async updateTopic(id:string, updateTopicParams: UpdateTopicParams){
     const topicData = await this.topicsRepository.findOne({where:{id:id}, relations:['editors','viewers']})
     if(!topicData){
       throw new CustomError(404, {message:"Topic Not Found"})
@@ -88,7 +88,7 @@ export class TopicService {
 
   // More Optimized Way to delete a list of users as editors or viewers
 
-  async deleteRole(id:number, deleteRolesParams: DeleteRoleParams){
+  async deleteRole(id:string, deleteRolesParams: DeleteRoleParams){
     try{   
       const tableName = 'topics_'+deleteRolesParams.role+'_users'
   
@@ -112,7 +112,7 @@ export class TopicService {
     return topicData
   }
 
-  async viewBlogsFromTopic(id:number){
+  async viewBlogsFromTopic(id:string){
     try{
       const blogsFromTopic = await this.topicsRepository.findOne({where:{id:id}, relations:['blogs']})
       return blogsFromTopic
