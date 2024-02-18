@@ -15,7 +15,7 @@ export class BlogsService {
   ) {}
 
   async createBlog(createBlogParams : CreateBlogParams){
-    const topicDetails = await this.topicsRepository.findOne({where:{topic_name:createBlogParams.topic}, relations:["blogs"]})
+    const topicDetails = await this.topicsRepository.findOneOrFail({where:{topic_name:createBlogParams.topic}, relations:["blogs"]})
     
     const blogDetails = this.blogsRepository.create(createBlogParams)
     blogDetails.topic_rel = topicDetails
@@ -25,7 +25,7 @@ export class BlogsService {
 
   async updateBlog(id :string, updateBlogParams :UpdateBlogParams){
 
-    const blogDetails = await this.blogsRepository.findOne({where:{id:id}})
+    const blogDetails = await this.blogsRepository.findOneOrFail({where:{id:id}})
 
     for(let i in updateBlogParams){
       if(updateBlogParams[i].length !== 0){
@@ -39,7 +39,7 @@ export class BlogsService {
   }
 
   async viewSpecificBlog(id:string){
-    const blogDetails = await this.blogsRepository.findOne({where:{id:id}, select:["topic", "blog_name", "blog_owner", "created_at", "desc", "header", "body", "footer"]})
+    const blogDetails = await this.blogsRepository.findOneOrFail({where:{id:id}, select:["topic", "blog_name", "blog_owner", "created_at", "desc", "header", "body", "footer"]})
     return blogDetails
   }
   

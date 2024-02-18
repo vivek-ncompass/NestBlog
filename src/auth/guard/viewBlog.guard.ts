@@ -15,7 +15,7 @@ export class ViewBlogVerificaiton implements CanActivate{
       return true
     }
 
-    const topicDetails = await this.blogsRepository.findOne({where:{id:request.param.id}, relations:["topic_rel"]})
+    const topicDetails = await this.blogsRepository.findOneOrFail({where:{id:request.param.id}, relations:["topic_rel"]})
 
     const listToCheck = [...topicDetails.topic_rel.editors, ...topicDetails.topic_rel.viewers]
 

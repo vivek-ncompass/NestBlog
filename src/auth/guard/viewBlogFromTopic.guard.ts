@@ -15,7 +15,7 @@ export class ViewBlogFromTopicGuard implements CanActivate{
       return true
     }
 
-    const topicDetails = await this.topicRepository.findOne({where:{id:request.param.id}, relations:["editors","viewers"]})
+    const topicDetails = await this.topicRepository.findOneOrFail({where:{id:request.param.id}, relations:["editors","viewers"]})
 
     const listToCheck = [...topicDetails.editors, ...topicDetails.viewers]
     

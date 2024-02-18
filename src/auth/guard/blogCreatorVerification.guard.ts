@@ -13,7 +13,7 @@ export class BlogCreatorVerificationGuard implements CanActivate{
     const body = request.body
     
     try{
-      const topicDetails = await this.topicsRepository.findOne({ relations:["editors"], where: {topic_name:body.topic, editors:{username:request.payload.username}}})
+      const topicDetails = await this.topicsRepository.findOneOrFail({ relations:["editors"], where: {topic_name:body.topic, editors:{username:request.payload.username}}})
 
       if(topicDetails){
         return true

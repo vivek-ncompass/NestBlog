@@ -16,7 +16,7 @@ export class TopicService {
   ) {}
 
   async findUserByUsername(user) {
-    return await this.usersRepository.findOne({ where: { username: user } });
+    return await this.usersRepository.findOneOrFail({ where: { username: user } });
   }
 
   async createTopic(createTopicParams: CreateTopicParams) {
@@ -44,7 +44,7 @@ export class TopicService {
   }
 
   async updateTopic(id:string, updateTopicParams: UpdateTopicParams){
-    const topicData = await this.topicsRepository.findOne({where:{id:id}, relations:['editors','viewers']})
+    const topicData = await this.topicsRepository.findOneOrFail({where:{id:id}, relations:['editors','viewers']})
     if(!topicData){
       throw new CustomError(404, {message:"Topic Not Found"})
     }
@@ -70,7 +70,7 @@ export class TopicService {
   }
 
   // async deleteRole(id:number, deleteRolesParams: DeleteRoleParams){
-  //   const topicData = await this.topicsRepository.findOne({where: {id:id},relations:[deleteRolesParams.role]})
+  //   const topicData = await this.topicsRepository.findOneOrFail({where: {id:id},relations:[deleteRolesParams.role]})
 
   //   let newRoleArr = []
   //   for(let i = 0; i<topicData[deleteRolesParams.role].length; i++){
@@ -114,7 +114,7 @@ export class TopicService {
 
   async viewBlogsFromTopic(id:string){
     try{
-      const blogsFromTopic = await this.topicsRepository.findOne({where:{id:id}, relations:['blogs']})
+      const blogsFromTopic = await this.topicsRepository.findOneOrFail({where:{id:id}, relations:['blogs']})
       return blogsFromTopic
     }
     catch(error){

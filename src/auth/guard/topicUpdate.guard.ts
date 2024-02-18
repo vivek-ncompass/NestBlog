@@ -14,7 +14,7 @@ export class TopicUpdateGuard implements CanActivate{
     const request = context.switchToHttp().getRequest()
 
     try{
-      const topicData = await this.topicsRepository.findOne({where:{id:request.param.id}})
+      const topicData = await this.topicsRepository.findOneOrFail({where:{id:request.param.id}})
 
       if(topicData.topic_owner !== request.payload.username || request.payload.level !== 4){
         throw new CustomError(HttpStatus.UNAUTHORIZED,{message:"You are not authorized to perform the operation"})

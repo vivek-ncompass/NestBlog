@@ -41,11 +41,11 @@ export class UsersService {
 
   async updateProfile(id: string, updateProfile:UpdateProfileType){
     try{
-      const profile = await this.profileRepository.findOne({where:{id}});
+      const profile = await this.profileRepository.findOneOrFail({where:{id}});
       if(!profile){
         throw new NotFoundException('Unable to find Profile');
       }
-      const user = await this.userRepository.findOne({where: { id: profile.id}})
+      const user = await this.userRepository.findOneOrFail({where: { id: profile.id}})
       if(!user ||  !user.isActive){
         throw new NotFoundException('User Deleted cannot update')
       }
@@ -60,7 +60,7 @@ export class UsersService {
   }
 
   async deleteUser(id : string){
-     const user = await this.userRepository.findOne({ where: {id}})
+     const user = await this.userRepository.findOneOrFail({ where: {id}})
      if(!user){
       throw new NotFoundException('User Not Found')
      }
@@ -72,7 +72,7 @@ export class UsersService {
   }
     
   async changePassword(id: string, changePasswordUser : ChangePasswordType){
-    const user = await this.userRepository.findOne({where: {id}})
+    const user = await this.userRepository.findOneOrFail({where: {id}})
     if(!user){
       throw new NotFoundException('User Not Found')
     }

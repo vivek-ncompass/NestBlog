@@ -18,7 +18,7 @@ export class DeleteBlogGuard implements CanActivate{
     }
     
     try{
-      const blogData = await this.topicsRepository.findOne({where:{id:request.param.id}})
+      const blogData = await this.topicsRepository.findOneOrFail({where:{id:request.param.id}})
       if(request.payload.username === blogData.blog_owner){
         return true
       }
