@@ -1,4 +1,4 @@
-import { Body, Controller, HttpStatus, NotFoundException, Param, Patch, Post, Put, Res, UseGuards, ValidationPipe } from '@nestjs/common';
+import { Body, Controller, Delete, HttpStatus, Param, Patch, Post, Put, Res, UseGuards, ValidationPipe } from '@nestjs/common';
 import { UsersService } from './users.service';
 import { CreateUserDto } from './dtos/createUser.dto';
 import { ApiResponse } from 'src/utils/response';
@@ -9,8 +9,6 @@ import { ChangePasswordDto } from './dtos/changePassword.dto';
 import { ChangeLevelDto } from './dtos/changeLevel.dto';
 import { TokenVerificationGuard } from 'src/auth/guard/tokenVerification.guard';
 import { ChangeLevelGuard } from 'src/auth/guard/changeLevelGuard.guard';
-import { log } from 'console';
-
 
 @Controller('users')
 export class UsersController {
@@ -26,20 +24,30 @@ export class UsersController {
     }
   }
 
+  @UseGuards(TokenVerificationGuard)
   @Put(':userId')
   async updateProfile(@Param('userId') id: string, @Body(ValidationPipe) updateProfileDto: UpdateProfileDto, @Res() response: Response) {
     try {
       const updatedProfile = await this.usersService.updateProfile(id,updateProfileDto);
       return new ApiResponse(response, 200, { message: "Profile updated successfully", profile: updatedProfile });
     } catch (error) {
-      if (error instanceof NotFoundException) {
-        return new ApiResponse(response, 404, { message: "Profile not found" });
-      } else {
-        return new ApiResponse(response, 500, { message: "Failed to update profile" });
-      }
+      throw new CustomError(HttpStatus.BAD_REQUEST, { message: error.message })
     }
   }
 
+  @UseGuards(TokenVerificationGuard)
+  @Delete(':userId')
+  async deleteUser(@Param('userId') id: string, @Res() response : Response){
+    try{
+    const deletedUser = await this.usersService.deleteUser(id);
+    return new ApiResponse(response,200, { message: 'User Deleted Successfully'}) 
+  }
+  catch(error){
+    throw new CustomError(HttpStatus.BAD_REQUEST, { message: error.message})
+  }
+}
+
+  @UseGuards(TokenVerificationGuard)
   @Patch(':id')
   async changeUserPassword(@Param('id') id:string, @Body(ValidationPipe) changePasswordDto: ChangePasswordDto, @Res() response: Response) {
     const passwordChanged = await this.usersService.changePassword(id, changePasswordDto);
