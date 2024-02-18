@@ -9,7 +9,6 @@ import { ChangePasswordDto } from './dtos/changePassword.dto';
 import { ChangeLevelDto } from './dtos/changeLevel.dto';
 import { TokenVerificationGuard } from 'src/auth/guard/tokenVerification.guard';
 import { ChangeLevelGuard } from 'src/auth/guard/changeLevelGuard.guard';
-import { log } from 'console';
 
 
 @Controller('users')

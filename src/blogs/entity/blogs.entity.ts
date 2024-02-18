@@ -6,10 +6,10 @@ export class Blogs {
   @PrimaryGeneratedColumn('uuid')
   id: string
 
-  @Column({unique:true})
+  @Column()
   topic:string
 
-  @Column({ nullable: false, length:255})
+  @Column({ nullable: false, length:255, unique: true})
   blog_name: string
 
   @Column({nullable:false})
