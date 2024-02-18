@@ -22,14 +22,10 @@ export class BlogEditorVerificationGuard implements CanActivate{
         throw new CustomError(404, {message:"Cannot update other's Blog"})
       }
 
-      const topicDetails = await this.topicsRepository.findOne({where:{topic_name:blogDetails.topic}, relations:['editors']})
+      const topicDetails = await this.topicsRepository.findOne({where:{topic_name:blogDetails.topic, editors:{username:request.payload.username}}, relations:['editors']})
 
-      const editors = topicDetails.editors
-
-      for(let i = 0; i<editors.length; i++){
-        if(editors[i].username === request.payload.username){
-          return true
-        }
+      if(topicDetails){
+        return true
       }
 
       return false

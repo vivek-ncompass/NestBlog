@@ -3,18 +3,18 @@ import { Column, CreateDateColumn, Entity, ManyToOne, PrimaryGeneratedColumn } f
 
 @Entity({name:'blogs'})
 export class Blogs {
-  @PrimaryGeneratedColumn()
-  id: number
+  @PrimaryGeneratedColumn('uuid')
+  id: string
 
   @Column()
   topic:string
 
-  @Column({ nullable: false, length:255})
+  @Column({ nullable: false, length:255, unique: true})
   blog_name: string
 
   @Column({nullable:false})
   desc:string
-
+  
   @Column({nullable:false})
   blog_owner: string
 

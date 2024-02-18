@@ -1,8 +1,7 @@
-import { Body, Controller, Post, UnauthorizedException, Res } from '@nestjs/common';
+import { Body, Controller, Post, UnauthorizedException, Res, ValidationPipe } from '@nestjs/common';
 import { UserLoginDto } from './dtos/UserLoginDto.dto';
 import { AuthService } from './auth.service';
 import { ApiResponse } from 'src/utils/response';
-import { CustomError } from 'src/utils/customError';
 
 
 @Controller('auth')
@@ -12,7 +11,7 @@ export class AuthController {
 
 
     @Post('login')
-    async login(@Body() loginUserDto: UserLoginDto, @Res() response: Response) {
+    async login(@Body(ValidationPipe) loginUserDto: UserLoginDto, @Res() response: Response) {
       try {
         const token = await this.authService.login(loginUserDto);
         return new ApiResponse(response, 200, { token });

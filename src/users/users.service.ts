@@ -1,5 +1,5 @@
 import { HttpStatus, Injectable, NotFoundException } from '@nestjs/common';
-import { QueryFailedError, Repository } from 'typeorm';
+import { Repository } from 'typeorm';
 import { Users } from './entity/users.entity';
 import { InjectRepository } from '@nestjs/typeorm';
 import * as md5 from 'md5';
@@ -35,19 +35,19 @@ export class UsersService {
       return savedUser;
     } 
     catch (error) {
-      if (error instanceof QueryFailedError)
-        throw new CustomError(HttpStatus.BAD_REQUEST, {
-          message: 'Username already exists',
-        });
-    }
-    throw new Error('Failed to register User');
+    throw new CustomError(HttpStatus.BAD_REQUEST, { message: error.message});
   }
+}
 
-  async updateProfile(id: number, updateProfile:UpdateProfileType){
+  async updateProfile(id: string, updateProfile:UpdateProfileType){
     try{
       const profile = await this.profileRepository.findOne({where:{id}});
       if(!profile){
         throw new NotFoundException('Unable to find Profile');
+      }
+      const user = await this.userRepository.findOne({where: { id: profile.id}})
+      if(!user ||  !user.isActive){
+        throw new NotFoundException('User Deleted cannot update')
       }
       Object.assign(profile, updateProfile);
       profile.updatedAt = new Date();
@@ -55,19 +55,30 @@ export class UsersService {
       return profile;
     } 
     catch (error) {
-      if (error instanceof NotFoundException) {
-        throw new NotFoundException('Profile not found');
-      } else {
-        throw new Error('Failed to update profile');
-      }
+      throw new CustomError(HttpStatus.BAD_REQUEST, { message: error.message } )
     }
   }
+
+  async deleteUser(id : string){
+     const user = await this.userRepository.findOne({ where: {id}})
+     if(!user){
+      throw new NotFoundException('User Not Found')
+     }
+     user.password = ""; 
+     user.isActive = false;
+     user.updatedAt = new Date();
+     await this.userRepository.save(user);
+     return user;
+  }
     
-  async changePassword(id: number, changePasswordUser : ChangePasswordType){
+  async changePassword(id: string, changePasswordUser : ChangePasswordType){
     const user = await this.userRepository.findOne({where: {id}})
     if(!user){
       throw new NotFoundException('User Not Found')
     }
+   if(!user.isActive){
+    throw new NotFoundException("User Deleted cannot change password")
+   } 
     user.updatedAt = new Date();
     user.password = md5(changePasswordUser.password)
     try{

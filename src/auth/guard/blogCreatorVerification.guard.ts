@@ -13,14 +13,11 @@ export class BlogCreatorVerificationGuard implements CanActivate{
     const body = request.body
     
     try{
-      const topicDetails = await this.topicsRepository.findOne({where: {topic_name:body.topic}, relations:["editors"]})
+      const topicDetails = await this.topicsRepository.findOne({ relations:["editors"], where: {topic_name:body.topic, editors:{username:request.payload.username}}})
 
-      const editors = topicDetails.editors
-      for(let i = 0; i<editors.length; i++){
-        if(editors[i].username === request.payload.username){
-          return true
+      if(topicDetails){
+        return true
       }
-    }
     }
     catch(error){
       throw new CustomError(HttpStatus.BAD_REQUEST, {message:error.message})
