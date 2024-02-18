@@ -2,7 +2,6 @@ import { Body, Controller, Post, UnauthorizedException, Res, ValidationPipe } fr
 import { UserLoginDto } from './dtos/UserLoginDto.dto';
 import { AuthService } from './auth.service';
 import { ApiResponse } from 'src/utils/response';
-import { CustomError } from 'src/utils/customError';
 
 
 @Controller('auth')
