@@ -19,7 +19,7 @@ export class ChangeLevelGuard implements CanActivate{
     
     const newLevel = request.body.level
 
-    const userData = await this.usersRepository.findOne({where:{username:request.body.username}})
+    const userData = await this.usersRepository.findOneOrFail({where:{username:request.body.username}})
 
     if(userData.level !== newLevel && request.payload.level !== newLevel){
       return true
