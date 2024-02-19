@@ -19,7 +19,7 @@ export class BlogsService {
     const blogDetails = this.blogsRepository.create(createBlogParams)
     blogDetails.topic_rel = topicDetails
     
-    return await this.blogsRepository.save(blogDetails)
+    return this.blogsRepository.save(blogDetails)
   }
 
   async updateBlog(id :string, updateBlogParams :UpdateBlogParams){

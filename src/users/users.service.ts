@@ -31,8 +31,7 @@ export class UsersService {
       const userCredentials = { username, password: md5(password)};
       const user = this.userRepository.create(userCredentials);
       user.profile = savedUserProfile;
-      const savedUser = await this.userRepository.save(user);
-      return savedUser;
+      return this.userRepository.save(user);
     } 
     catch (error) {
     throw new CustomError(HttpStatus.BAD_REQUEST, { message: error.message});
@@ -41,18 +40,13 @@ export class UsersService {
 
   async updateProfile(id: string, updateProfile:UpdateProfileType){
     try{
-      const profile = await this.profileRepository.findOneOrFail({where:{id}});
-      if(!profile){
-        throw new NotFoundException('Unable to find Profile');
-      }
-      const user = await this.userRepository.findOneOrFail({where: { id: profile.id}})
+      const user = await this.userRepository.findOneOrFail({where: { id: id}, relations:["profile"]})
       if(!user ||  !user.isActive){
         throw new NotFoundException('User Deleted cannot update')
       }
-      Object.assign(profile, updateProfile);
-      profile.updatedAt = new Date();
-      await this.profileRepository.save(profile);
-      return profile;
+      Object.assign(user.profile, updateProfile);
+      user.profile.updatedAt = new Date();
+      return this.profileRepository.save(user.profile);;
     } 
     catch (error) {
       throw new CustomError(HttpStatus.BAD_REQUEST, { message: error.message } )
@@ -64,10 +58,14 @@ export class UsersService {
      if(!user){
       throw new NotFoundException('User Not Found')
      }
+     if(!user.isActive){
+      throw new CustomError(HttpStatus.BAD_REQUEST, {message:"User already deleted!"})
+     }
      user.password = ""; 
      user.isActive = false;
      user.updatedAt = new Date();
      await this.userRepository.save(user);
+     console.log("User: " +user)
      return user;
   }
     
