@@ -4,7 +4,6 @@ import { Repository } from 'typeorm';
 import { Blogs } from './entity/blogs.entity';
 import { CreateBlogParams } from './types/createBlog.type';
 import { Topics } from 'src/topic/entity/topic.entity';
-import { CustomError } from 'src/utils/customError';
 import { UpdateBlogParams } from './types/updateBlog.type';
 
 @Injectable()
@@ -15,31 +14,31 @@ export class BlogsService {
   ) {}
 
   async createBlog(createBlogParams : CreateBlogParams){
-    const topicDetails = await this.topicsRepository.findOne({where:{topic_name:createBlogParams.topic}, relations:["blogs"]})
+    const topicDetails = await this.topicsRepository.findOneOrFail({where:{topic_name:createBlogParams.topic}, relations:["blogs"]})
     
     const blogDetails = this.blogsRepository.create(createBlogParams)
     blogDetails.topic_rel = topicDetails
     
-    return await this.blogsRepository.save(blogDetails)
+    return this.blogsRepository.save(blogDetails)
   }
 
-  async updateBlog(id :number, updateBlogParams :UpdateBlogParams){
+  async updateBlog(id :string, updateBlogParams :UpdateBlogParams){
 
-    const blogDetails = await this.blogsRepository.findOne({where:{id:id}})
+    const blogDetails = await this.blogsRepository.findOneOrFail({where:{id:id}})
 
-    for(let i in updateBlogParams){
-      if(updateBlogParams[i].length !== 0){
-        blogDetails[i] = updateBlogParams[i]
-      }
-    }
+    Object.assign(blogDetails, updateBlogParams)
 
     blogDetails.updated_at = new Date()
 
     return this.blogsRepository.save(blogDetails)
   }
 
-  async viewSpecificBlog(id:number){
-    const blogDetails = await this.blogsRepository.findOne({where:{id:id}, select:["topic", "blog_name", "blog_owner", "created_at", "desc", "header", "body", "footer"]})
+  async viewSpecificBlog(id:string){
+    const blogDetails = await this.blogsRepository.findOneOrFail({where:{id:id}, select:["topic", "blog_name", "blog_owner", "created_at", "desc", "header", "body", "footer"]})
     return blogDetails
+  }
+  
+  async deleteBlog(id:string){
+    await this.blogsRepository.delete(id)
   }
 }

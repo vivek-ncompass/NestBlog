@@ -1,9 +1,11 @@
-import { IsArray, IsString } from "class-validator";
+import { IsNumber, IsString } from "class-validator";
 
 export class DeleteRolesDto{
-  @IsArray()
-  @IsString({each:true})
-  evList:string[]
+
+  // This is a list of userids to delete
+
+  @IsNumber({},{each: true})
+  userArr:number[]
 
   @IsString()
   role:string

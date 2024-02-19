@@ -1,5 +1,6 @@
 import { Column, Entity, JoinColumn, OneToOne, PrimaryGeneratedColumn } from "typeorm";
 import { Profiles } from "./profile.entity";
+import { OTP } from "src/auth/entity/otp.entity";
 
 export enum UserRole {
     SUPERADMIN = 4,
@@ -11,8 +12,8 @@ export enum UserRole {
 @Entity( { name: 'users'})
 export class Users{
     
-    @PrimaryGeneratedColumn()
-    id: number;
+    @PrimaryGeneratedColumn('uuid')
+    id: string;
 
     @Column( { nullable : false, unique : true } ) 
     username: string; 
@@ -29,11 +30,15 @@ export class Users{
     @Column( { type: 'timestamp', precision: 0, nullable : false, default: () => 'CURRENT_TIMESTAMP'})
     createdAt: Date;
 
-    @Column({nullable:true, default: null})
+    @Column({type: 'timestamp', nullable:true, default: null})
     updatedAt: Date;
 
     @OneToOne(() => Profiles) 
     @JoinColumn() 
     profile: Profiles;
+
+    @OneToOne(() => OTP, {nullable: true, onDelete:"SET NULL"})
+    @JoinColumn()
+    otp: OTP
 
 }

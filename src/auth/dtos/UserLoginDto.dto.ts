@@ -2,10 +2,12 @@ import { IsNotEmpty, IsString } from "class-validator";
 
 export class UserLoginDto{
 
-    @IsString() @IsNotEmpty()
+    @IsString() 
+    @IsNotEmpty()
     username: string
 
-    @IsString() @IsNotEmpty() 
+    @IsString() 
+    @IsNotEmpty() 
     password: string
     
 }

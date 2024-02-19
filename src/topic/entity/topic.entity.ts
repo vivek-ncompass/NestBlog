@@ -4,10 +4,10 @@ import { Column, CreateDateColumn, Entity, JoinTable, ManyToMany, OneToMany, Pri
 
 @Entity({name:'topics'})
 export class Topics {
-  @PrimaryGeneratedColumn()
-  id: number
+  @PrimaryGeneratedColumn('uuid')
+  id: string
 
-  @Column({ nullable: false, length:255})
+  @Column({ nullable: false, length:255, unique:true})
   topic_name: string
 
   @Column({nullable:false})

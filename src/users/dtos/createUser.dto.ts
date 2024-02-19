@@ -23,7 +23,7 @@ export class CreateUserDto{
     @IsNotEmpty()
     email: string
 
-    @IsPhoneNumber()
+    @IsNumber()
     @IsNotEmpty() 
     phoneNo: number
 
@@ -31,7 +31,4 @@ export class CreateUserDto{
     @IsNotEmpty()  
     @IsEnum(Gender)
     gender: Gender
-
-    @IsNumber()
-    level: number
 }
