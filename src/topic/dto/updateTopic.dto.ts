@@ -1,15 +1,18 @@
-import { IsArray, IsString } from "class-validator"
+import { IsArray, IsOptional, IsString } from "class-validator"
 
 export class UpdateTopicDto{
+  @IsOptional()
   @IsString()
-  desc:string
+  desc?:string
 
+  @IsOptional()
   @IsArray()
   @IsString({each:true})
-  editors:string[]
+  editors?:string[]
 
+  @IsOptional()
   @IsArray()
   @IsString({each:true})
-  viewers:string[]
+  viewers?:string[]
 
 }

@@ -1,5 +1,5 @@
 export type UpdateTopicParams = {
-  desc:string,
-  editors:string[],
-  viewers:string[]
+  desc?:string,
+  editors?:string[],
+  viewers?:string[]
 }
