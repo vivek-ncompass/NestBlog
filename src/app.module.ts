@@ -13,6 +13,7 @@ import { TopicModule } from './topic/topic.module';
 import { BlogsModule } from './blogs/blogs.module';
 import { AuthModule } from './auth/auth.module';
 import { GlobalExceptionFilter } from './utils/globalErrorHandler';
+import { OTP } from './auth/entity/otp.entity';
 
 @Module({
   imports: [ 
@@ -24,9 +25,10 @@ import { GlobalExceptionFilter } from './utils/globalErrorHandler';
       username:process.env.MYSQL_USER,
       password:process.env.MYSQL_PASSWORD,
       database:process.env.MYSQL_DATABASE,
-      entities:[Users, Profiles, Topics, Blogs],
+      entities:[Users, Profiles, Topics, Blogs, OTP],
       synchronize:true
     }),
+    TypeOrmModule.forFeature([OTP]),
     UsersModule,TopicModule, BlogsModule, AuthModule
   ],
   controllers: [AppController],
