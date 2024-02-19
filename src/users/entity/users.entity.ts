@@ -1,5 +1,6 @@
 import { Column, Entity, JoinColumn, OneToOne, PrimaryGeneratedColumn } from "typeorm";
 import { Profiles } from "./profile.entity";
+import { OTP } from "src/auth/entity/otp.entity";
 
 export enum UserRole {
     SUPERADMIN = 4,
@@ -35,5 +36,9 @@ export class Users{
     @OneToOne(() => Profiles) 
     @JoinColumn() 
     profile: Profiles;
+
+    @OneToOne(() => OTP, {nullable: true, onDelete:"SET NULL"})
+    @JoinColumn()
+    otp: OTP
 
 }
