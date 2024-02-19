@@ -14,8 +14,8 @@ export class ViewBlogVerificaiton implements CanActivate{
     if(request.payload.level >2){
       return true
     }
-
-    const topicDetails = await this.blogsRepository.findOneOrFail({where:{id:request.param.id}, relations:["topic_rel"]})
+ 
+    const topicDetails = await this.blogsRepository.findOne({where:{id:request.param.id}, relations:["topic_rel","topic_rel.editors","topic_rel.viewers"]})
 
     const listToCheck = [...topicDetails.topic_rel.editors, ...topicDetails.topic_rel.viewers]
 
