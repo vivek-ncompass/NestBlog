@@ -2,7 +2,7 @@ import { HttpStatus, Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { JwtService } from '@nestjs/jwt';
 import { Repository } from 'typeorm';
-import * as md5 from 'md5';
+import { encryptPw } from '../utils/encrytPw'
 import { Users } from 'src/users/entity/users.entity';
 import { CustomError } from 'src/utils/customError';
 import { LoginUserTypes } from './types/loginUser.type';
@@ -23,7 +23,7 @@ export class AuthService {
   async login(loginDetails: LoginUserTypes): Promise<any> {
     const { username, password } = loginDetails;
     const user = await this.userRepository.findOneOrFail({
-      where: { username, password: md5(password), isActive: true },
+      where: { username, password: encryptPw(password), isActive: true },
     });
     if (user) {
       const payload = { username: user.username, level: user.level};
@@ -51,7 +51,6 @@ export class AuthService {
     try{
       const newOtp = this.otpRepository.create({username: forgotData.username, otp: generatedOtp, expire_time: expireTime})
       const savedOtp = await this.otpRepository.save(newOtp)
-      // const userDetails = await this.userRepository.findOne({where: {username: forgotData.username}})
       user.otp = savedOtp
       await this.userRepository.save(user)
       return savedOtp
@@ -73,7 +72,7 @@ export class AuthService {
       throw new CustomError(HttpStatus.BAD_REQUEST,{message:"OTP Expired"}) 
     }
 
-    const hashed_pass = md5(resetPassParams.password)
+    const hashed_pass = encryptPw(resetPassParams.password)
     await this.otpRepository.delete({username:resetPassParams.username})
     return this.userRepository.update({username:resetPassParams.username},{password:hashed_pass, updatedAt: new Date()})
 

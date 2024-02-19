@@ -1,7 +1,7 @@
 import { BadRequestException, HttpStatus, Injectable, NotFoundException } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
-import * as md5 from 'md5';
+import { encryptPw } from '../utils/encrytPw'
 import { Users } from './entity/users.entity';
 import { CreateUserTypes } from './types/createUser.type';
 import { UpdateProfileType } from './types/updateProfile.type';
@@ -28,7 +28,7 @@ export class UsersService {
       const userProfile = this.profileRepository.create(userProfileData);
       const savedUserProfile = await this.profileRepository.save(userProfile);
 
-      const userCredentials = { username, password: md5(password)};
+      const userCredentials = { username, password: encryptPw(password)};
       const user = this.userRepository.create(userCredentials);
       user.profile = savedUserProfile;
       return this.userRepository.save(user);
@@ -79,11 +79,11 @@ export class UsersService {
     throw new NotFoundException("User Deleted cannot change password")
    } 
    
-   if (user.password !== md5(oldPassword)) {
+   if (user.password !== encryptPw(oldPassword)) {
     throw new BadRequestException("Old password is incorrect");
 }
     user.updatedAt = new Date();
-    user.password = md5(password)
+    user.password = encryptPw(password)
     try{
       const passwordChanged = await this.userRepository.save(user); 
       return passwordChanged;

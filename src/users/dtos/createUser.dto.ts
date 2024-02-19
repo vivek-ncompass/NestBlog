@@ -31,7 +31,4 @@ export class CreateUserDto{
     @IsNotEmpty()  
     @IsEnum(Gender)
     gender: Gender
-
-    // @IsNumber()
-    // level: number
 }
