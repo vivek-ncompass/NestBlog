@@ -1,4 +1,4 @@
-import { HttpStatus, Injectable, NotFoundException } from '@nestjs/common';
+import { BadRequestException, HttpStatus, Injectable, NotFoundException } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 import * as md5 from 'md5';
@@ -70,6 +70,7 @@ export class UsersService {
   }
     
   async changePassword(id: string, changePasswordUser : ChangePasswordType){
+    const { oldPassword, password } = changePasswordUser;
     const user = await this.userRepository.findOneOrFail({where: {id}})
     if(!user){
       throw new NotFoundException('User Not Found')
@@ -77,8 +78,12 @@ export class UsersService {
    if(!user.isActive){
     throw new NotFoundException("User Deleted cannot change password")
    } 
+   
+   if (user.password !== md5(oldPassword)) {
+    throw new BadRequestException("Old password is incorrect");
+}
     user.updatedAt = new Date();
-    user.password = md5(changePasswordUser.password)
+    user.password = md5(password)
     try{
       const passwordChanged = await this.userRepository.save(user); 
       return passwordChanged;

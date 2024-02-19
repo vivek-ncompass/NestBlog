@@ -23,7 +23,7 @@ export class AuthService {
   async login(loginDetails: LoginUserTypes): Promise<any> {
     const { username, password } = loginDetails;
     const user = await this.userRepository.findOneOrFail({
-      where: { username, password: md5(password) },
+      where: { username, password: md5(password), isActive: true },
     });
     if (user) {
       const payload = { username: user.username, level: user.level};
