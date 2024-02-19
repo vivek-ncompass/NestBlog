@@ -49,7 +49,9 @@ export class TopicService {
       throw new CustomError(404, {message:"Topic Not Found"})
     }
 
-    topicData.desc = updateTopicParams.desc
+    if(topicData.desc !== ""){
+      topicData.desc = updateTopicParams.desc
+    }
 
     let newEditorsArr:Users[] = [], newViewersArr:Users[] = []
 

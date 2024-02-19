@@ -35,6 +35,9 @@ export class TopicController {
   async updateTopic(@Param("id") id:string, @Body(ValidationPipe) updateTopicDto : UpdateTopicDto, @Res() response: Response){
     try{
 
+      if(!updateTopicDto.desc){
+        updateTopicDto.desc = ""
+      }
       if(!updateTopicDto.editors){
         updateTopicDto.editors = []
       }
