@@ -30,9 +30,9 @@ export class BlogsController {
 
   @UseGuards(TokenVerificationGuard, BlogEditorVerificationGuard)
   @Patch(":id")
-  updateBlog(@Param('id') id:string, @Body(ValidationPipe) updateBlogDto: UpdateBlogDto, @Res() response:Response){
+  async updateBlog(@Param('id') id:string, @Body(ValidationPipe) updateBlogDto: UpdateBlogDto, @Res() response:Response){
     try{
-      const updateBlogData = this.blogsService.updateBlog(id,updateBlogDto)
+      const updateBlogData = await this.blogsService.updateBlog(id,updateBlogDto)
       new ApiResponse(response, 200, {message:"Blog Updated Successfully"})
     }
     catch(error){

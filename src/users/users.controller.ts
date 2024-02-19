@@ -29,7 +29,7 @@ export class UsersController {
   async updateProfile(@Param('userId') id: string, @Body(ValidationPipe) updateProfileDto: UpdateProfileDto, @Res() response: Response) {
     try {
       const updatedProfile = await this.usersService.updateProfile(id,updateProfileDto);
-      return new ApiResponse(response, 200, { message: "Profile updated successfully", profile: updatedProfile });
+      return new ApiResponse(response, 200, { message: "Profile updated successfully"});
     } catch (error) {
       throw new CustomError(HttpStatus.BAD_REQUEST, { message: error.message })
     }
