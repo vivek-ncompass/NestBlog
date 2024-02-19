@@ -1,4 +1,4 @@
 export type DeleteRoleParams = {
-  userArr: number[]
+  userArr: string[]
   role: string
 }
