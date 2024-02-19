@@ -32,6 +32,6 @@ export class CreateUserDto{
     @IsEnum(Gender)
     gender: Gender
 
-    @IsNumber()
-    level: number
+    // @IsNumber()
+    // level: number
 }
