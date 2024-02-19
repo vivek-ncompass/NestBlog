@@ -14,7 +14,7 @@ import { ChangeLevelGuard } from 'src/auth/guard/changeLevelGuard.guard';
 export class UsersController {
   constructor(private readonly usersService: UsersService) {}
   @Post()
-  async registerUser(@Body() createUserDto: CreateUserDto,@Res() response: Response,
+  async registerUser(@Body(ValidationPipe) createUserDto: CreateUserDto,@Res() response: Response,
   ) {
     try {
       const createdUser = await this.usersService.registerUser(createUserDto);     
