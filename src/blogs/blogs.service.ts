@@ -26,11 +26,7 @@ export class BlogsService {
 
     const blogDetails = await this.blogsRepository.findOneOrFail({where:{id:id}})
 
-    for(let i in updateBlogParams){
-      if(updateBlogParams[i].length !== 0){
-        blogDetails[i] = updateBlogParams[i]
-      }
-    }
+    Object.assign(blogDetails, updateBlogParams)
 
     blogDetails.updated_at = new Date()
 
