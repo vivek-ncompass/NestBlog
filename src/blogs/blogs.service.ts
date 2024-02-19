@@ -4,7 +4,6 @@ import { Repository } from 'typeorm';
 import { Blogs } from './entity/blogs.entity';
 import { CreateBlogParams } from './types/createBlog.type';
 import { Topics } from 'src/topic/entity/topic.entity';
-import { CustomError } from 'src/utils/customError';
 import { UpdateBlogParams } from './types/updateBlog.type';
 
 @Injectable()

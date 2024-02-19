@@ -1,8 +1,8 @@
 import { HttpStatus, Injectable, NotFoundException } from '@nestjs/common';
-import { Repository } from 'typeorm';
-import { Users } from './entity/users.entity';
 import { InjectRepository } from '@nestjs/typeorm';
+import { Repository } from 'typeorm';
 import * as md5 from 'md5';
+import { Users } from './entity/users.entity';
 import { CreateUserTypes } from './types/createUser.type';
 import { UpdateProfileType } from './types/updateProfile.type';
 import { Profiles } from './entity/profile.entity';

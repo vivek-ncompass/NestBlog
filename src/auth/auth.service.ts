@@ -1,10 +1,10 @@
 import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
-import { Users } from 'src/users/entity/users.entity';
+import { JwtService } from '@nestjs/jwt';
 import { Repository } from 'typeorm';
 import * as md5 from 'md5';
+import { Users } from 'src/users/entity/users.entity';
 import { CustomError } from 'src/utils/customError';
-import { JwtService } from '@nestjs/jwt';
 import { LoginUserTypes } from './types/loginUser.type';
 
 

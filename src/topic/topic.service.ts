@@ -1,7 +1,7 @@
 import { HttpStatus, Injectable } from '@nestjs/common';
-import { CreateTopicParams } from './types/createTopic.types';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
+import { CreateTopicParams } from './types/createTopic.types';
 import { Users } from 'src/users/entity/users.entity';
 import { CustomError } from 'src/utils/customError';
 import { Topics } from './entity/topic.entity';

@@ -1,12 +1,12 @@
 import { Module } from '@nestjs/common';
+import { TypeOrmModule } from '@nestjs/typeorm';
+import { JwtModule } from '@nestjs/jwt';
+import { ConfigModule } from '@nestjs/config';
 import { BlogsController } from './blogs.controller';
 import { BlogsService } from './blogs.service';
-import { TypeOrmModule } from '@nestjs/typeorm';
 import { Blogs } from './entity/blogs.entity';
 import { Users } from 'src/users/entity/users.entity';
 import { Topics } from 'src/topic/entity/topic.entity';
-import { JwtModule } from '@nestjs/jwt';
-import { ConfigModule } from '@nestjs/config';
 
 
 @Module({

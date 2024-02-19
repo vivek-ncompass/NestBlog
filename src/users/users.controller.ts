@@ -1,8 +1,8 @@
 import { Body, Controller, Delete, HttpStatus, Param, Patch, Post, Put, Res, UseGuards, ValidationPipe } from '@nestjs/common';
+import { Response } from 'express';
 import { UsersService } from './users.service';
 import { CreateUserDto } from './dtos/createUser.dto';
 import { ApiResponse } from 'src/utils/response';
-import { Response } from 'express';
 import { CustomError } from 'src/utils/customError';
 import { UpdateProfileDto } from './dtos/updateProfile.dto';
 import { ChangePasswordDto } from './dtos/changePassword.dto';

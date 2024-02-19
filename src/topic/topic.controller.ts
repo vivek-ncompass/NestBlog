@@ -1,7 +1,7 @@
 import { Body, Controller, Delete, Get, HttpStatus, Param, ParseIntPipe, Patch, Post, Request, Res, UseGuards, ValidationPipe } from '@nestjs/common';
+import { Response } from 'express';
 import { TopicService } from './topic.service';
 import { TopicDtoParams } from './dto/createTopic.dto';
-import { Response } from 'express';
 import { ApiResponse } from 'src/utils/response';
 import { TokenVerificationGuard } from 'src/auth/guard/tokenVerification.guard';
 import { CustomError } from 'src/utils/customError';
